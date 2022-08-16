@@ -1,0 +1,40 @@
+﻿@page
+@model Sankirtana.Web.Pages.Books
+
+@{
+
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Список книг</title>
+</head>
+<body>
+<div>
+  <a href="~/newbook" class="btn btn-primary">Добавить книгу</a>
+  <table class="table">
+    <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Имя</th>
+      <th scope="col">Фамилия</th>
+      <th scope="col">Обращение</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var book in Model.BookList)
+    {
+      <tr>
+        <th scope="row">@book.Id</th>
+        <td>@book.Name</td>
+        <td>@book.VolumePoints</td>
+        <td>Удалить</td>
+      </tr>
+    }
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

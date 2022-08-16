@@ -1,0 +1,30 @@
+﻿@page
+@model Sankirtana.Web.Pages.NewBook
+
+@{
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Добавление новой книги</title>
+</head>
+<body>
+<div>
+    <form method="post">
+        <div class="mb-3">
+            <label for="bookName" class="form-label">Название книги</label>
+            <input type="text" class="form-control" id="bookName" aria-describedby="nameHelp" name="name">
+            <div id="nameHelp" class="form-text">Введите тут название книги</div>
+        </div>
+        <div class="mb-3">
+            <label for="volumePoints" class="form-label">Очки</label>
+            <input type="number" class="form-control" id="volumePoints" name="volumePoints" aria-describedby="vpHelp">
+            <div id="vpHelp" class="form-text">Количество очков, начисляемых за продажу книги</div>
+        </div>
+        <button type="submit" class="btn btn-primary">Отправить</button>
+    </form>
+</div>
+</body>
+</html>
