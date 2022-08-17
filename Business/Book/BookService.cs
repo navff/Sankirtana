@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using Sankirtana.Web.Common;
 
@@ -25,12 +26,28 @@ public class BookService
 
     public async Task<List<Book>> GetBooks()
     {
-        var builder = new FilterDefinitionBuilder<Book>();
-        var filter = builder.Empty;
-        
         var books = _dbStore.DB.GetCollection<Book>("books");
-        var count = books.CountDocuments(filter);
         var result = await books.FindAsync(_ => true);
         return result.ToList();
+    }
+
+    public async Task DeleteBook(string id)
+    {
+        var books = _dbStore.DB.GetCollection<Book>("books");
+        await books.DeleteOneAsync(new BsonDocument("_id", new ObjectId(id)));
+    }
+    
+    public async Task<Book> GetById(string id)
+    {
+        var books = _dbStore.DB.GetCollection<Book>("books");
+        var book = await books.Find(new BsonDocument("_id", new ObjectId(id))).FirstOrDefaultAsync();
+        return book;
+    }
+
+    public async Task<Book> EditBook(Book book)
+    {
+        var books = _dbStore.DB.GetCollection<Book>("books");
+        await books.ReplaceOneAsync(new BsonDocument("_id", book.Id), book);
+        return book;
     }
 }

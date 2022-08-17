@@ -1,30 +1,23 @@
 ﻿@page
-@model Sankirtana.Web.Pages.NewBook
+@model Sankirtana.Web.Pages.EditBook
 
 @{
+    
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <title>Добавление новой книги</title>
-</head>
-<body>
 <div>
     <form method="post">
+        <input type="hidden" value="@Model.Book.Id" name="Id"/>
         <div class="mb-3">
             <label for="bookName" class="form-label">Название книги</label>
-            <input type="text" class="form-control" id="bookName" aria-describedby="nameHelp" name="name">
+            <input type="text" class="form-control" id="bookName" aria-describedby="nameHelp" name="name" value="@Model.Book.Name">
             <div id="nameHelp" class="form-text">Введите тут название книги</div>
         </div>
         <div class="mb-3">
             <label for="volumePoints" class="form-label">Очки</label>
-            <input type="number" class="form-control" id="volumePoints" name="volumePoints" aria-describedby="vpHelp">
+            <input type="number" class="form-control" id="volumePoints" name="volumePoints" aria-describedby="vpHelp" value="@Model.Book.VolumePoints">
             <div id="vpHelp" class="form-text">Количество очков, начисляемых за продажу книги</div>
         </div>
         <button type="submit" class="btn btn-primary">Отправить</button>
     </form>
 </div>
-</body>
-</html>
