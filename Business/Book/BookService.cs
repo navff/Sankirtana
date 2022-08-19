@@ -27,7 +27,7 @@ public class BookService
     public async Task<List<Book>> GetBooks()
     {
         var books = _dbStore.DB.GetCollection<Book>("books");
-        var result = await books.FindAsync(_ => true);
+        var result = await books.Find(_ => true).Sort(Builders<Book>.Sort.Ascending(nameof(Book.Name))).ToListAsync();
         return result.ToList();
     }
 
