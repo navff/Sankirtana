@@ -1,5 +1,5 @@
 html {
-  font-size: 14px;
+  font-size: 16px;
 }
 
 @media (min-width: 768px) {
@@ -19,4 +19,9 @@ body {
 
 .logo {
   max-width: 200px;
+}
+
+.nav-link {
+  font-size: x-large;
+  color: #1e2125;
 }

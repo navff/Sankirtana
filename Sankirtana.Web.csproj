@@ -13,4 +13,24 @@
       <PackageReference Include="Newtonsoft.Json" Version="13.0.2-beta1" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Pages\Users" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="design\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="design\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="design\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Remove="design\**" />
+    </ItemGroup>
+
 </Project>
