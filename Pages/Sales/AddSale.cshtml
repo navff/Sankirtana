@@ -22,31 +22,35 @@
         <button type="submit" class="btn btn-lg btn-primary">Ушла!</button>
     </form>
     <br/>
-    <h2>Сегодня мной распространено:</h2>
-    <table class="table">
-        <thead>
-        <tr>
-          <th scope="col">Название</th>
-          <th scope="col">Кол-во очков</th>
-          <th scope="col">Действия</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var sale in Model.Sales)
-        {
-          <tr>
-            <td><a href="~/sales/editSale?id=@sale.Id">@sale.Book.Name</a></td>
-            <td>@sale.Book.VolumePoints</td>
-            <td>
-              <form method="post" action="~/sales/DeleteSale">
-                <input type="hidden" name="id" value="@sale.Id"/>
-                <input type="submit" class="btn btn-sm btn-danger" onclick="return OnDeleteClick()" value="Удалить"/>
-              </form>
-            </td>
-          </tr>
-        }
-        </tbody>
-      </table>
+    @if (@Model.Sales.Any())
+    {
+        <h2>Сегодня мной распространено:</h2>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Название</th>
+                <th scope="col">Кол-во очков</th>
+                <th scope="col">Действия</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var sale in Model.Sales)
+            {
+                <tr>
+                    <td><a href="~/sales/editSale?id=@sale.Id">@sale.Book.Name</a></td>
+                    <td>@sale.Book.VolumePoints</td>
+                    <td>
+                        <form method="post" action="~/sales/DeleteSale">
+                            <input type="hidden" name="id" value="@sale.Id"/>
+                            <input type="submit" class="btn btn-sm btn-danger" onclick="return OnDeleteClick()" value="Удалить"/>
+                        </form>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+    
 </div>
 
 
