@@ -1,12 +1,12 @@
 ﻿@page
-@model Sankirtana.Web.Pages.Books
+@model Sankirtana.Web.Pages.Books.IndexBooksPageModel
 
 @{
 
 }
 
 <div>
-  <a href="~/editbook" class="btn btn-primary">Добавить книгу</a>
+  <a href="~/books/editbook" class="btn btn-primary">Добавить книгу</a>
   <table class="table">
     <thead>
     <tr>
@@ -19,10 +19,10 @@
     @foreach (var book in Model.BookList)
     {
       <tr>
-        <td><a href="~/editbook?id=@book.Id">@book.Name</a></td>
+        <td><a href="~/books/editbook?id=@book.Id">@book.Name</a></td>
         <td>@book.VolumePoints</td>
         <td>
-          <form method="post" action="~/DeleteBook">
+          <form method="post" action="~/books/DeleteBook">
             <input type="hidden" name="id" value="@book.Id"/>
             <input type="submit" class="btn btn-sm btn-danger" onclick="return OnDeleteClick()" value="Удалить"/>
           </form>
