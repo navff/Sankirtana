@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using Sankirtana.Web.Business.Book;
+using Sankirtana.Web.Business.Books;
 
 namespace Sankirtana.Web.Pages;
 

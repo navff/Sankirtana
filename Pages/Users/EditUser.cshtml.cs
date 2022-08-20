@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MongoDB.Bson;
-using Sankirtana.Web.Business.PortalUser;
+using Sankirtana.Web.Business.PortalUsers;
 
 namespace Sankirtana.Web.Pages;
 

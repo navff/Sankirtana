@@ -1,6 +1,6 @@
 ﻿using MongoDB.Bson;
 
-namespace Sankirtana.Web.Business.PortalUser;
+namespace Sankirtana.Web.Business.PortalUsers;
 
 public class PortalUserUpdateViewModel
 {
@@ -20,9 +20,9 @@ public class PortalUserUpdateViewModel
     
     public string City { get; set; }
     
-    public PortalUser ToUser()
+    public PortalUsers.PortalUser ToUser()
     {
-        return new PortalUser()
+        return new PortalUsers.PortalUser()
         {
             City = this.City,
             Email = this.Email,

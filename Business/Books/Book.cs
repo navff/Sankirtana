@@ -2,7 +2,7 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace Sankirtana.Web.Business.Book;
+namespace Sankirtana.Web.Business.Books;
 
 
 public class Book
@@ -15,4 +15,6 @@ public class Book
     
     [Display(Name = "Начисляемые очки")]
     public int VolumePoints { get; set; }
+    
+    public string Category { get; set; }
 }

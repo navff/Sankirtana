@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
-using Sankirtana.Web.Business.Book;
-using Sankirtana.Web.Business.PortalUser;
+using Sankirtana.Web.Business.PortalUsers;
 
 namespace Sankirtana.Web.Pages;
 

@@ -1,6 +1,6 @@
 ﻿using MongoDB.Bson;
 
-namespace Sankirtana.Web.Business.Book;
+namespace Sankirtana.Web.Business.Books;
 
 public class BookUpdateViewModel
 {
@@ -10,9 +10,9 @@ public class BookUpdateViewModel
     
     public int VolumePoints { get; set; }
 
-    public Book ToBook()
+    public Books.Book ToBook()
     {
-        return new Book()
+        return new Books.Book()
         {
             Id = string.IsNullOrEmpty(this.Id) 
                 ? new ObjectId() 

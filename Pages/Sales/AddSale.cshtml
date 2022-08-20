@@ -8,12 +8,14 @@
 <br/>
 
 <div>
-    <form>
+    <form method="post">
         <div class="mb-3">
             <label for="Book" class="form-label">Книга</label>
-            <select class="form-control" id="Book" name="Book" >
-                <option value="AL">Прабхупада</option>
-                <option value="WY">Шримад Бхагаватам 1.1</option>
+            <select class="form-control" id="Book" name="BookId">
+                @foreach (var book in Model.BookList)
+                {
+                    <option value="@book.Id">@book.Name</option>
+                }
             </select>
         </div>
         
@@ -30,14 +32,14 @@
         </tr>
         </thead>
         <tbody>
-        @foreach (var book in Model.BookList)
+        @foreach (var sale in Model.Sales)
         {
           <tr>
-            <td><a href="~/books/editbook?id=@book.Id">@book.Name</a></td>
-            <td>@book.VolumePoints</td>
+            <td><a href="~/sales/editSale?id=@sale.Id">@sale.Book.Name</a></td>
+            <td>@sale.Book.VolumePoints</td>
             <td>
-              <form method="post" action="~/books/DeleteBook">
-                <input type="hidden" name="id" value="@book.Id"/>
+              <form method="post" action="~/sales/DeleteSale">
+                <input type="hidden" name="id" value="@sale.Id"/>
                 <input type="submit" class="btn btn-sm btn-danger" onclick="return OnDeleteClick()" value="Удалить"/>
               </form>
             </td>
@@ -54,4 +56,13 @@
            width: '100%'
         });
     });
+    
+    function OnDeleteClick()
+    {
+      if (confirm("Удалить?")) {
+        		return true;
+        	} else {
+        		return false;
+        	}
+    }
 </script>
