@@ -25,3 +25,5 @@ body {
   font-size: x-large;
   color: #1e2125;
 }
+.select2-selection { overflow: hidden; }
+.select2-selection__rendered { white-space: normal; word-break: break-all; }
