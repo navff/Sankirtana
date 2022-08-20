@@ -14,10 +14,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Pages\Users" />
-    </ItemGroup>
-
-    <ItemGroup>
       <Compile Remove="design\**" />
     </ItemGroup>
 
@@ -31,6 +27,10 @@
 
     <ItemGroup>
       <Content Remove="design\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Pages\Sales" />
     </ItemGroup>
 
 </Project>

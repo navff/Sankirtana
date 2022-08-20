@@ -41,6 +41,6 @@ public class EditBook : PageModel
             await _bookService.EditBook(bookViewModel.ToBook());
         }
         
-        return RedirectToPage("books");
+        return RedirectToPage("/Books/Index");
     }
 }

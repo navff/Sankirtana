@@ -2,6 +2,7 @@ using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using Microsoft.AspNetCore.Mvc;
 using Sankirtana.Web.Business.Book;
+using Sankirtana.Web.Business.PortalUser;
 using Sankirtana.Web.Common;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,6 +24,7 @@ builder.Services.AddSingleton(HtmlEncoder.Create(allowedRanges: new[] { UnicodeR
 builder.Services.AddSingleton<EnvironmentConfig>();
 builder.Services.AddSingleton<DbStore>();
 builder.Services.AddTransient<BookService>();
+builder.Services.AddTransient<PortalUserService>();
 
 var app = builder.Build();
 

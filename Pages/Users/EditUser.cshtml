@@ -1,0 +1,36 @@
+﻿@page
+@model Sankirtana.Web.Pages.EditUser
+
+@{
+    
+}
+
+<div>
+    <form method="post">
+        <input type="hidden" value="@Model.User.Id" name="Id"/>
+        <div class="mb-3">
+            <label for="firstName" class="form-label">Имя</label>
+            <input type="text" class="form-control" id="firstName" aria-describedby="firstNameHelp" name="FirstName" value="@Model.User.FirstName">
+        </div>
+        <div class="mb-3">
+            <label for="lastName" class="form-label">Фамилия</label>
+            <input type="text" class="form-control" id="lastName" name="LastName" aria-describedby="vpHelp" value="@Model.User.LastName">
+        </div>
+        <div class="mb-3">
+            <label for="Phone" class="form-label">Телефон</label>
+            <input type="text" class="form-control" id="Phone" name="Phone" aria-describedby="PhoneHelp" value="@Model.User.Phone">
+        </div>
+        <div class="mb-3">
+            <label for="Email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="Email" name="Email" aria-describedby="EmailHelp" value="@Model.User.Email">
+        </div>
+        <div class="mb-3">
+            <label for="City" class="form-label">Город</label>
+            <select class="form-select" name="City" id="City">
+                <!option @(Model.User.City=="Череповец" ? "selected" : "") value="Череповец">Череповец</!option>
+                <!option @(Model.User.City=="Вологда" ? "selected" : "") value="Вологда">Вологда</!option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Отправить</button>
+    </form>
+</div>
