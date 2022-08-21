@@ -29,6 +29,8 @@ public class PortalUser
     
     [Display(Name = "Город")]
     public string City { get; set; }
+    
+    public string Role { get; set; }
 }
 
 public class PortaUserShort
@@ -41,4 +43,6 @@ public class PortaUserShort
 
     [Display(Name = "Город")]
     public string City { get; set; }
+    
+    public string Role { get; set; }
 }

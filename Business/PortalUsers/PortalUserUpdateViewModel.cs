@@ -20,6 +20,8 @@ public class PortalUserUpdateViewModel
     
     public string City { get; set; }
     
+    public string Role { get; set; }
+    
     public PortalUsers.PortalUser ToUser()
     {
         return new PortalUsers.PortalUser()
@@ -32,7 +34,8 @@ public class PortalUserUpdateViewModel
             Phone = this.Phone,
             Token = this.Token,
             FirstName = this.FirstName,
-            LastName = this.LastName
+            LastName = this.LastName,
+            Role = this.Role
         };
     }
 }

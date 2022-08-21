@@ -1,5 +1,6 @@
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
 using Sankirtana.Web.Business.Books;
@@ -14,7 +15,18 @@ port = port ?? "8080";
 builder.WebHost.UseUrls($"http://localhost:{port}");
 
 var directory = Directory.GetCurrentDirectory();
-// Add services to the container.
+
+builder.Services.Configure<CookiePolicyOptions>(options =>
+{
+    // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+    options.CheckConsentNeeded = context => true;
+    options.MinimumSameSitePolicy = SameSiteMode.None;
+});
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(cookieOptions => {
+    cookieOptions.LoginPath = "/";
+});
+
 builder.Services.AddRazorPages(options =>
     {
         // отключаем глобально Antiforgery-токен
@@ -43,6 +55,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication(); 
 app.UseAuthorization();
 
 app.MapRazorPages();

@@ -31,6 +31,18 @@
                 <!option @(Model.User.City=="Вологда" ? "selected" : "") value="Вологда">Вологда</!option>
             </select>
         </div>
+        
+        <div class="mb-3">
+            <label for="Role" class="form-label">Роль</label>
+            <select class="form-select" name="Role" id="Role">
+                <!option @(Model.User.Role=="Seller" ? "selected" : "") value="Seller">Санкиртанщик</!option>
+                <!option @(Model.User.Role=="Admin" ? "selected" : "") value="Admin">Администратор</!option>
+                <!option @(Model.User.Role=="Reader" ? "selected" : "") value="Reader">Читатель</!option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <small>@Request.Host/auth/logon?token=@Model.User.Token</small>
+        </div>
         <button type="submit" class="btn btn-primary">Отправить</button>
     </form>
 </div>
