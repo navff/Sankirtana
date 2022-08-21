@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Sankirtana.Web.Business.PortalUsers;
 
 namespace Sankirtana.Web.Pages.Users;
 
+[Authorize(Roles = "Admin")]
 public class Index : PageModel
 {
     public List<PortalUser> UsersList = new List<PortalUser>();
@@ -12,7 +14,7 @@ public class Index : PageModel
     {
         _portalUserService = portalUserService;
     }
-
+    
     public async Task OnGet()
     {
         this.UsersList = await _portalUserService.GetUsers();

@@ -1,0 +1,14 @@
+﻿@page
+@model Sankirtana.Web.Pages.Auth.NotAllowed
+
+@{
+    ViewBag.Title = "Вам сюда нельзя";
+}
+<h2>Чтобы сюда попасть, нужно иметь на то права и обязанности.</h2>
+
+
+<script>
+    setTimeout(()=> {
+        window.location = '/';
+    }, 2000)
+</script>

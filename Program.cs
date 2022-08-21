@@ -25,9 +25,11 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(cookieOptions => {
     cookieOptions.LoginPath = "/";
-});
+    cookieOptions.AccessDeniedPath = "/auth/NotAllowed";
+    });
 
-builder.Services.AddRazorPages(options =>
+builder.Services
+    .AddRazorPages(options =>
     {
         // отключаем глобально Antiforgery-токен
         options.Conventions.ConfigureFilter(new IgnoreAntiforgeryTokenAttribute());

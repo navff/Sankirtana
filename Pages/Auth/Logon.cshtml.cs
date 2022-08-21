@@ -27,9 +27,13 @@ public class Logon : PageModel
         var claims = new List<Claim>
         {
             new Claim(ClaimTypes.Name, dbUser.Name),
-            new Claim(ClaimTypes.Email, dbUser.Email),
             new Claim(ClaimTypes.Role, dbUser.Role)
         };
+        if (!string.IsNullOrEmpty(dbUser.Email))
+        {
+            claims.Add(new Claim(ClaimTypes.Email, dbUser.Email));
+        }
+
         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
         var user = new ClaimsPrincipal(claimsIdentity);
         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, user);
