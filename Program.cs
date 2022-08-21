@@ -1,6 +1,7 @@
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.FileProviders;
 using Sankirtana.Web.Business.Books;
 using Sankirtana.Web.Business.PortalUsers;
 using Sankirtana.Web.Business.Sales;
@@ -12,15 +13,15 @@ var port = Environment.GetEnvironmentVariable("PORT");
 port = port ?? "8080";
 builder.WebHost.UseUrls($"http://localhost:{port}");
 
+var directory = Directory.GetCurrentDirectory();
 // Add services to the container.
 builder.Services.AddRazorPages(options =>
-{
-    // отключаем глобально Antiforgery-токен
-    options.Conventions.ConfigureFilter(new IgnoreAntiforgeryTokenAttribute());
+    {
+        // отключаем глобально Antiforgery-токен
+        options.Conventions.ConfigureFilter(new IgnoreAntiforgeryTokenAttribute());
+    })
+    .AddRazorRuntimeCompilation(options => options.FileProviders.Add(new PhysicalFileProvider(directory)));
 
-    // Custom routes
-    // options.Conventions.AddPageRoute("/Mk/MkList", "/mk");
-});
 builder.Services.AddSingleton(HtmlEncoder.Create(allowedRanges: new[] { UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic }));
 builder.Services.AddSingleton<EnvironmentConfig>();
 builder.Services.AddSingleton<DbStore>();
@@ -38,7 +39,6 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
