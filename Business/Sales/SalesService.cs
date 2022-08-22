@@ -29,6 +29,26 @@ public class SalesService
         var result = await sales.Find(_ => true).Sort(Builders<Sale>.Sort.Descending(nameof(Sale.Date))).ToListAsync();
         return result.ToList();
     }
+    
+    public async Task<List<Sale>> GetSalesByUser(string userId, DateTime? date)
+    {
+        var builder = Builders<Sale>.Filter;
+        var filter = builder.Empty;
+        
+        filter &= builder.Eq(x => x.User.Id, new ObjectId(userId));
+        
+        if (date.HasValue)
+        {
+            filter &= builder.Gt(x => x.Date, date.Value) ;
+            filter &= builder.Lt(x => x.Date, date.Value.AddDays(1)) ;
+        }
+        
+        var sales = _dbStore.DB.GetCollection<Sale>("sales");
+        var result = await sales.Find(filter)
+            .Sort(Builders<Sale>.Sort.Descending(nameof(Sale.Date)))
+            .ToListAsync();
+        return result;
+    }
 
     public async Task DeleteSale(string id)
     {

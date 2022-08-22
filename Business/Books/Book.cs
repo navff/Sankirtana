@@ -14,7 +14,19 @@ public class Book
     public string Name { get; set; }
     
     [Display(Name = "Начисляемые очки")]
-    public int VolumePoints { get; set; }
+    public decimal VolumePoints { get; set; }
     
     public string Category { get; set; }
+
+    public static decimal GetVolumeByCategory(string category)
+    {
+        return category switch
+        {
+            "MahaBig" => 2,
+            "Big" => 1,
+            "Medium" => 0.5m,
+            "Small" => 0.25m,
+            _ => 0
+        };
+    }
 }

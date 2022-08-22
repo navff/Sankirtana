@@ -11,8 +11,9 @@
     <thead>
     <tr>
       <th scope="col">Название</th>
-      <th scope="col">Кол-во очков</th>
-      <th scope="col">Действия</th>
+      <th scope="col">Категория</th>
+      <th scope="col">Баллы</th>
+      <th scope="col"></th>
     </tr>
     </thead>
     <tbody>
@@ -20,11 +21,14 @@
     {
       <tr>
         <td><a href="~/books/editbook?id=@book.Id">@book.Name</a></td>
+        <td>@book.Category</td>
         <td>@book.VolumePoints</td>
-        <td>
+        <td class="text-end">
           <form method="post" action="~/books/DeleteBook">
             <input type="hidden" name="id" value="@book.Id"/>
-            <input type="submit" class="btn btn-sm btn-danger" onclick="return OnDeleteClick()" value="Удалить"/>
+            <button type="submit" class="btn btn-sm btn-danger btn-floating" onclick="return OnDeleteClick()">
+              <i class="bi bi-trash"></i>
+            </button>
           </form>
         </td>
       </tr>

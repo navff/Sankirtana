@@ -14,10 +14,18 @@
             <div id="nameHelp" class="form-text">Введите тут название книги</div>
         </div>
         <div class="mb-3">
-            <label for="volumePoints" class="form-label">Очки</label>
-            <input type="number" class="form-control" id="volumePoints" name="volumePoints" aria-describedby="vpHelp" value="@Model.Book.VolumePoints">
-            <div id="vpHelp" class="form-text">Количество очков, начисляемых за продажу книги</div>
+            <p>Очки: @Model.Book.VolumePoints</p>
         </div>
-        <button type="submit" class="btn btn-primary">Отправить</button>
+        <div class="mb-3">
+                    <label for="Category" class="form-label">Категория</label>
+            <select class="form-select" name="Category" id="Category">
+                <!option value="">--- Не выбрано ---</!option>
+                <!option @(Model.Book.Category == "MahaBig" ? "selected" : "") value="MahaBig">Маха-Биг</!option>
+                <!option @(Model.Book.Category == "Big" ? "selected" : "") value="Big">Биг</!option>
+                <!option @(Model.Book.Category == "Medium" ? "selected" : "") value="Medium">Средняя</!option>
+                <!option @(Model.Book.Category == "Small" ? "selected" : "") value="Small">Маленькая</!option>
+            </select>
+                </div>
+        <button type="submit" class="btn btn-primary">Сохранить</button>
     </form>
 </div>

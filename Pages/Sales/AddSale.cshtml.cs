@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Sankirtana.Web.Business.Books;
 using Sankirtana.Web.Business.PortalUsers;
 using Sankirtana.Web.Business.Sales;
+using Sankirtana.Web.Common.Helpers;
 
 namespace Sankirtana.Web.Pages.Sales;
 
@@ -27,13 +29,15 @@ public class AddSale : PageModel
     public async Task OnGet()
     {
         this.BookList = await _bookService.GetBooks();
-        this.Sales = await _salesService.GetSales();
+        this.Sales = await _salesService.GetSalesByUser(
+            User.Claims.First(c => c.Type == ClaimTypes.Sid).Value, 
+            DateTime.Today);
     }
 
     public async Task<IActionResult> OnPost(SaleUpdateViewModel viewModel)
     {
         var book = await _bookService.GetById(viewModel.BookId);
-        var user = await _portalUserService.GetById("63005e8fbe776597bb4b48b8"); // TODO: получить из сессии
+        var user = await _portalUserService.GetById(User.GetId());
 
         var sale = new Sale()
         {

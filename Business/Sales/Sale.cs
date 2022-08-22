@@ -12,6 +12,7 @@ public class Sale
     
     public PortaUserShort User { get; set; }
     
+    [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
     public DateTime Date { get; set; }
     
     public string ContactName { get; set; }

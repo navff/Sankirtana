@@ -8,7 +8,7 @@ public class BookUpdateViewModel
 
     public string Name { get; set; } = "";
     
-    public int VolumePoints { get; set; }
+    public string Category { get; set; }
 
     public Books.Book ToBook()
     {
@@ -18,7 +18,8 @@ public class BookUpdateViewModel
                 ? new ObjectId() 
                 : new ObjectId(this.Id),
             Name = this.Name,
-            VolumePoints = this.VolumePoints
+            VolumePoints = Book.GetVolumeByCategory(this.Category),
+            Category = this.Category
         };
     }
 }

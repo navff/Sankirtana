@@ -27,7 +27,8 @@ public class Logon : PageModel
         var claims = new List<Claim>
         {
             new Claim(ClaimTypes.Name, dbUser.Name),
-            new Claim(ClaimTypes.Role, dbUser.Role)
+            new Claim(ClaimTypes.Role, dbUser.Role),
+            new Claim(ClaimTypes.Sid, dbUser.Id.ToString())
         };
         if (!string.IsNullOrEmpty(dbUser.Email))
         {

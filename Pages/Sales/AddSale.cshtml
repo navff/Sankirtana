@@ -29,8 +29,8 @@
             <thead>
             <tr>
                 <th scope="col">Название</th>
-                <th scope="col">Кол-во очков</th>
-                <th scope="col">Действия</th>
+                <th scope="col">Время</th>
+                <th scope="col"></th>
             </tr>
             </thead>
             <tbody>
@@ -38,11 +38,15 @@
             {
                 <tr>
                     <td><a href="~/sales/editSale?id=@sale.Id">@sale.Book.Name</a></td>
-                    <td>@sale.Book.VolumePoints</td>
                     <td>
+                        <small>@sale.Date.ToShortTimeString()</small>
+                    </td>
+                    <td class="text-end">
                         <form method="post" action="~/sales/DeleteSale">
                             <input type="hidden" name="id" value="@sale.Id"/>
-                            <input type="submit" class="btn btn-sm btn-danger" onclick="return OnDeleteClick()" value="Удалить"/>
+                            <button type="submit" class="btn btn-sm btn-danger btn-floating" onclick="return OnDeleteClick()">
+                              <i class="bi bi-trash"></i>
+                            </button>
                         </form>
                     </td>
                 </tr>
