@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Sankirtana.Web.Business.PortalUsers;
+using Sankirtana.Web.Common;
 
 namespace Sankirtana.Web.Pages.Users;
 
-[Authorize(Roles = "Admin")]
+[RESTAuthorize("Admin")]
 public class Index : PageModel
 {
     public List<PortalUser> UsersList = new List<PortalUser>();
