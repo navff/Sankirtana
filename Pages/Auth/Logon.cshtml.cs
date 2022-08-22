@@ -24,20 +24,8 @@ public class Logon : PageModel
             return RedirectToPage("Index");
         }
         
-        var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.Name, dbUser.Name),
-            new Claim(ClaimTypes.Role, dbUser.Role),
-            new Claim(ClaimTypes.Sid, dbUser.Id.ToString())
-        };
-        if (!string.IsNullOrEmpty(dbUser.Email))
-        {
-            claims.Add(new Claim(ClaimTypes.Email, dbUser.Email));
-        }
+        Response.Cookies.Append("Token", token);
 
-        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-        var user = new ClaimsPrincipal(claimsIdentity);
-        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, user);
         return RedirectToPage("/sales/AddSale");
     }
 }

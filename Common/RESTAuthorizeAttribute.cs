@@ -97,8 +97,14 @@ namespace Sankirtana.Web.Common;
 
         public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
         {
+            var token = context.HttpContext.Request.Cookies["Token"];
+            if (token == null)
+            {
+                return;
+            }
+
             var userService = context.HttpContext.RequestServices.GetService<PortalUserService>();
-            var user = await userService.GetById("63005e8fbe776597bb4b48b8");
+            var user = await userService.GetByToken(token);
             context.HttpContext.User = new GenericPrincipal(new Identity() {Name = user.Name, IsAuthenticated = true, Id = user.Id.ToString()}, new []{user.Role});
         }
     }
