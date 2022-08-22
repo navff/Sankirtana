@@ -1,15 +1,13 @@
-﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Sankirtana.Web.Business.Books;
 using Sankirtana.Web.Business.PortalUsers;
 using Sankirtana.Web.Business.Sales;
-using Sankirtana.Web.Common.Helpers;
+using Sankirtana.Web.Common;
 
 namespace Sankirtana.Web.Pages.Sales;
 
-[Authorize]
+[RESTAuthorize]
 public class AddSale : PageModel
 {
     public List<Book> BookList;
@@ -32,14 +30,14 @@ public class AddSale : PageModel
     {
         this.BookList = await _bookService.GetBooks();
         this.Sales = await _salesService.GetSalesByUser(
-            User.GetId(), 
+            (User.Identity as Identity).Id, 
             DateTime.Today);
     }
 
     public async Task<IActionResult> OnPost(SaleUpdateViewModel viewModel)
     {
         var book = await _bookService.GetById(viewModel.BookId);
-        var user = await _portalUserService.GetById(User.GetId());
+        var user = await _portalUserService.GetById((User.Identity as Identity).Id);
 
         var sale = new Sale()
         {
