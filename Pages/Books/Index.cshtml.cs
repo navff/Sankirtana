@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Sankirtana.Web.Business.Books;
 
 namespace Sankirtana.Web.Pages.Books;
 
+[Authorize]
 public class IndexBooksPageModel : PageModel
 {
     private readonly BookService _bookService;
