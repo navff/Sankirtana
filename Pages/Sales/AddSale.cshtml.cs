@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Sankirtana.Web.Business.Books;
@@ -8,6 +9,7 @@ using Sankirtana.Web.Common.Helpers;
 
 namespace Sankirtana.Web.Pages.Sales;
 
+[Authorize]
 public class AddSale : PageModel
 {
     public List<Book> BookList;
