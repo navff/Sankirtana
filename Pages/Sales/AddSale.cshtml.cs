@@ -32,7 +32,7 @@ public class AddSale : PageModel
     {
         this.BookList = await _bookService.GetBooks();
         this.Sales = await _salesService.GetSalesByUser(
-            User.Claims.First(c => c.Type == ClaimTypes.Sid).Value, 
+            User.GetId(), 
             DateTime.Today);
     }
 
