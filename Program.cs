@@ -24,8 +24,10 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
 });
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(cookieOptions => {
-    cookieOptions.LoginPath = "/auth/NotAllowed";
-    cookieOptions.AccessDeniedPath = "/auth/NotAllowed";
+        cookieOptions.LoginPath = "/auth/NotAllowed";
+        cookieOptions.AccessDeniedPath = "/auth/NotAllowed";
+        cookieOptions.ExpireTimeSpan = TimeSpan.FromDays(365);
+        cookieOptions.Cookie.MaxAge = TimeSpan.FromDays(365);
     });
 
 builder.Services
