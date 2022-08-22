@@ -24,7 +24,13 @@ public class Logon : PageModel
             return RedirectToPage("Index");
         }
         
-        Response.Cookies.Append("Token", token);
+        Response.Cookies.Append(
+            "Token", 
+            token, 
+            new CookieOptions()
+            {
+                Expires = DateTimeOffset.Now.AddDays(365)
+            });
 
         return RedirectToPage("/sales/AddSale");
     }

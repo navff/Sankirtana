@@ -1,4 +1,5 @@
 ﻿using System.Security.Principal;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Sankirtana.Web.Business.PortalUsers;
 
@@ -100,6 +101,7 @@ namespace Sankirtana.Web.Common;
             var token = context.HttpContext.Request.Cookies["Token"];
             if (token == null)
             {
+                context.Result = new ForbidResult();
                 return;
             }
 
