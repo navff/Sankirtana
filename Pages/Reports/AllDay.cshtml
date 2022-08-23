@@ -18,7 +18,7 @@
     </form>
 </section>
 
-@if (!Model.UserSales.Any())
+@if (!Model.Statistic.Records.Any())
 {
     <div>
         <br/>
@@ -26,9 +26,35 @@
     </div>
     
 }
+else
+{
+    <div class="container" style="margin-top: 20px">
+        <div class="row">
+            <div class="col-sm-4">
+                <p>
+                    Всего книг: @Model.Statistic.TotalBookCount<br/>
+                    Всего баллов: @Model.Statistic.VolumePoints
+                </p>        
+            </div>
+            <div class="col-sm-4">
+                <p>
+                    Маха-Биг: @Model.Statistic.MahaBig<br/>
+                    Биг: @Model.Statistic.Big
+                </p> 
+            </div>
+            <div class="col-sm-4">
+                <p>
+                    Средние: @Model.Statistic.Medium<br/>
+                    Маленькие: @Model.Statistic.Small
+                </p> 
+            </div>
+        </div>
+    </div>
+}
+
 
 <div>
-    @foreach (var userSale  in Model.UserSales)
+    @foreach (var userSale  in Model.Statistic.Records)
     {   
         <br/>
         <h2>@userSale.User.Name</h2>

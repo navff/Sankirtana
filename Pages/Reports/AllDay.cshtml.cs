@@ -7,7 +7,7 @@ namespace Sankirtana.Web.Pages.Reports;
 public class AllDay : PageModel
 {
     private SalesService _salesService;
-    public List<UserSalesStatisticRecord> UserSales;
+    public PeriodicStatistic Statistic;
     public DateTime DateStart;
     public DateTime DateEnd;
 
@@ -23,7 +23,7 @@ public class AllDay : PageModel
             
         this.DateStart = dateStart.Value;
         this.DateEnd = dateEnd.Value.AddDays(1).AddSeconds(-1);
-        this.UserSales = await _salesService.GetSalesStat(
+        this.Statistic = await _salesService.GetSalesStat(
             this.DateStart, 
             this.DateEnd);
     }

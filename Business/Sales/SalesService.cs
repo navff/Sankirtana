@@ -44,7 +44,7 @@ public class SalesService
         return result.ToList();
     }
     
-    public async Task<List<UserSalesStatisticRecord>> GetSalesStat(
+    public async Task<PeriodicStatistic> GetSalesStat(
         DateTime? dateStart, 
         DateTime? dateEnd)
     {
@@ -94,7 +94,16 @@ public class SalesService
             });
         }
         
-        return result;
+        return new PeriodicStatistic
+        {
+            Records = result,
+            TotalBookCount = filteredSales.Count,
+            MahaBig = filteredSales.Count(s => s.Book.Category == "MahaBig"),
+            Big = filteredSales.Count(s => s.Book.Category == "Big"),
+            Medium = filteredSales.Count(s => s.Book.Category == "Medium"),
+            Small = filteredSales.Count(s => s.Book.Category == "Small"),
+            VolumePoints = filteredSales.Sum(s => s.Book.VolumePoints)
+        };
     }
 
     public async Task DeleteSale(string id)
