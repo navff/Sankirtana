@@ -28,25 +28,25 @@
 }
 else
 {
-    <div class="container" style="margin-top: 20px">
+    <div style="margin-top: 20px">
         <div class="row">
-            <div class="col-sm-4">
-                <p>
-                    Всего книг: @Model.Statistic.TotalBookCount<br/>
-                    Всего баллов: @Model.Statistic.VolumePoints
-                </p>        
+            <div class="col-sm-3">
+                <small>
+                    Книг: @Model.Statistic.TotalBookCount<br/>
+                    Баллов: @Model.Statistic.VolumePoints
+                </small>        
             </div>
-            <div class="col-sm-4">
-                <p>
+            <div class="col-sm-3">
+                <small>
                     Маха-Биг: @Model.Statistic.MahaBig<br/>
                     Биг: @Model.Statistic.Big
-                </p> 
+                </small> 
             </div>
-            <div class="col-sm-4">
-                <p>
+            <div class="col-sm-3">
+                <small>
                     Средние: @Model.Statistic.Medium<br/>
                     Маленькие: @Model.Statistic.Small
-                </p> 
+                </small> 
             </div>
         </div>
     </div>
@@ -58,6 +58,9 @@ else
     {   
         <br/>
         <h2>@userSale.User.Name</h2>
+        <small>
+            Книг: @userSale.TotalBookCount, Баллов: @userSale.VolumePoints
+        </small>
         <table class="table">
             <thead>
             <tr>

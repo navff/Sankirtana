@@ -90,7 +90,9 @@ public class SalesService
             result.Add(new UserSalesStatisticRecord()
             {
                 User = sale.User,
-                Sales = userSales
+                Sales = userSales,
+                VolumePoints = userSales.Sum(s => s.VolumePoints),
+                TotalBookCount = userSales.Sum(s => s.Quantity)
             });
         }
         

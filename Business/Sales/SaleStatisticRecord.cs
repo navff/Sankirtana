@@ -5,7 +5,12 @@ namespace Sankirtana.Web.Business.Sales;
 public class UserSalesStatisticRecord
 {
     public PortalUserShort User { get; set; }
+    
     public List<BookSaleStatisticRecord> Sales { get; set; }
+    
+    public int TotalBookCount { get; set; }
+    
+    public decimal VolumePoints { get; set; }
 }
 
 public class BookSaleStatisticRecord
