@@ -42,7 +42,7 @@ public class AddSale : PageModel
         var sale = new Sale()
         {
             Book = book,
-            User = new PortaUserShort() {City = user.City, Id = user.Id, Name = user.Name},
+            User = new PortalUserShort() {City = user.City, Id = user.Id, Name = user.Name},
             Date = DateTime.Now,
             ContactName = viewModel.ContactName,
             ContactPhone = viewModel.ContactPhone

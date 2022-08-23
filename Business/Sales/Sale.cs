@@ -10,7 +10,7 @@ public class Sale
     [BsonRepresentation(BsonType.ObjectId)]
     public ObjectId Id { get; set; }
     
-    public PortaUserShort User { get; set; }
+    public PortalUserShort User { get; set; }
     
     [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
     public DateTime Date { get; set; }

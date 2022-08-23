@@ -23,15 +23,10 @@ public class SalesService
         return sale;
     }
 
-    public async Task<List<Sale>> GetSales()
-    {
-        var sales = _dbStore.DB.GetCollection<Sale>("sales");
-        var result = await sales.Find(_ => true).Sort(Builders<Sale>.Sort.Descending(nameof(Sale.Date))).ToListAsync();
-        return result.ToList();
-    }
-    
     public async Task<List<Sale>> GetSalesByUser(string userId, DateTime? date)
     {
+        var sales = _dbStore.DB.GetCollection<Sale>("sales");
+        
         var builder = Builders<Sale>.Filter;
         var filter = builder.Empty;
         
@@ -42,11 +37,63 @@ public class SalesService
             filter &= builder.Gt(x => x.Date, date.Value) ;
             filter &= builder.Lt(x => x.Date, date.Value.AddDays(1)) ;
         }
-        
-        var sales = _dbStore.DB.GetCollection<Sale>("sales");
+
         var result = await sales.Find(filter)
             .Sort(Builders<Sale>.Sort.Descending(nameof(Sale.Date)))
             .ToListAsync();
+        return result.ToList();
+    }
+    
+    public async Task<List<UserSalesStatisticRecord>> GetSalesStat(
+        DateTime? dateStart, 
+        DateTime? dateEnd)
+    {
+        var builder = Builders<Sale>.Filter;
+        var filter = builder.Empty;
+        
+        if (dateStart.HasValue)
+        {
+            filter &= builder.Gte(x => x.Date, dateStart.Value) ;
+        }
+        
+        if (dateEnd.HasValue)
+        {
+            filter &= builder.Lte(x => x.Date, dateEnd.Value) ;
+        }
+        
+        var sales = _dbStore.DB.GetCollection<Sale>("sales");
+        var filteredSales = await sales.Find(filter)
+            .Sort(Builders<Sale>.Sort.Descending(nameof(Sale.Date)))
+            .ToListAsync();
+
+        var result = new List<UserSalesStatisticRecord>();
+        foreach (var sale in filteredSales.DistinctBy(s => s.User.Id))
+        {
+            var userSales = new List<BookSaleStatisticRecord>();
+            foreach (var uniqSale in filteredSales.DistinctBy(s => s.Book.Id))
+            {
+                var bookSalesCount = filteredSales.Count(s => s.Book.Id == uniqSale.Book.Id);
+                var volumePoints = bookSalesCount * uniqSale.Book.VolumePoints;
+                
+                if (userSales.Any(s => s.BookName == uniqSale.Book.Name)) continue;
+                
+                userSales.Add(new BookSaleStatisticRecord
+                {
+                    User = sale.User,
+                    BookName = uniqSale.Book.Name,
+                    SaleId = sale.Id.ToString(),
+                    Quantity = bookSalesCount,
+                    VolumePoints = volumePoints
+                });
+            }
+            
+            result.Add(new UserSalesStatisticRecord()
+            {
+                User = sale.User,
+                Sales = userSales
+            });
+        }
+        
         return result;
     }
 

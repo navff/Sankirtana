@@ -33,7 +33,7 @@ public class PortalUser
     public string Role { get; set; }
 }
 
-public class PortaUserShort
+public class PortalUserShort
 {
     [BsonRepresentation(BsonType.ObjectId)]
     public ObjectId Id { get; set; }

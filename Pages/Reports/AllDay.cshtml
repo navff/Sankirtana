@@ -1,0 +1,88 @@
+﻿@page
+@model Sankirtana.Web.Pages.Reports.AllDay
+
+@{
+    ViewBag.Title = "Статистика";
+}
+<h1>Статистика</h1>
+
+<section class="container">
+    <form id="dateRange" class="row" method="get">
+        <div id="reportrange" 
+             style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%; max-width: 300px;">
+            <i class="bi bi-calendar-range"></i>&nbsp;
+            <span></span> <i class="bi bi-caret-down" style="float: right"></i>
+        </div>
+        <input type="hidden" id="DateStart" name="DateStart"/>
+        <input type="hidden" id="DateEnd" name="DateEnd"/>
+    </form>
+</section>
+
+@if (!Model.UserSales.Any())
+{
+    <div>
+        <br/>
+        <p>Ничего не распространили =(</p>
+    </div>
+    
+}
+
+<div>
+    @foreach (var userSale  in Model.UserSales)
+    {   
+        <br/>
+        <h2>@userSale.User.Name</h2>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Книга</th>
+                <th scope="col">Количество</th>
+                <th scope="col">Очки</th>
+            </tr>
+            </thead>
+            @foreach (var sale in userSale.Sales)
+            {
+                <tr>
+                    <td>@sale.BookName</td>
+                    <td>@sale.Quantity</td>
+                    <td>@sale.VolumePoints</td>
+                </tr>
+            }
+        </table>    
+    }
+    
+</div>
+
+<script type="text/javascript">
+$(function() {
+
+    var start = moment(new Date('@Model.DateStart.ToString("yyyy-MM-dd")'));
+    var end = moment(new Date('@Model.DateEnd.ToString("yyyy-MM-dd")'));
+    console.log('END: ' + end);
+    
+    function setRangeInControl(start, end) {
+        $('#reportrange span').html(start.format('DD.MM.YYYY') + ' — ' + end.format('DD.MM.YYYY'));
+    }
+    
+    function cb2(start, end) {
+            $('#DateStart').val(start.format('YYYY-MM-DD'));
+            $('#DateEnd').val(end.format('YYYY-MM-DD'));
+            $('#dateRange').submit();
+        }
+
+    $('#reportrange').daterangepicker({
+        startDate: start,
+        endDate: end,
+        ranges: {
+           'Сегодня': [moment(), moment()],
+           'Вчера': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+           'Последние 7 дней': [moment().subtract(6, 'days'), moment()],
+           'Этот месяц': [moment().startOf('month'), moment().endOf('month')],
+           'Предыдущий месяц': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        }
+    }, cb2);
+
+    setRangeInControl(start, end);
+
+});
+</script>
