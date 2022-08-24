@@ -67,21 +67,21 @@ public class SalesService
             .ToListAsync();
 
         var result = new List<UserSalesStatisticRecord>();
-        foreach (var sale in filteredSales.DistinctBy(s => s.User.Id))
+        foreach (var userWhoHasSales in filteredSales.Select(s => s.User).DistinctBy(u => u.Id))
         {
             var userSales = new List<BookSaleStatisticRecord>();
-            foreach (var uniqSale in filteredSales.DistinctBy(s => s.Book.Id))
+            foreach (var uniqUserSale in filteredSales.Where(s => s.User.Id == userWhoHasSales.Id).DistinctBy(s => s.Book.Id))
             {
-                var bookSalesCount = filteredSales.Count(s => s.Book.Id == uniqSale.Book.Id);
-                var volumePoints = bookSalesCount * uniqSale.Book.VolumePoints;
+                var bookSalesCount = filteredSales.Count(s => s.Book.Id == uniqUserSale.Book.Id);
+                var volumePoints = bookSalesCount * uniqUserSale.Book.VolumePoints;
                 
-                if (userSales.Any(s => s.BookName == uniqSale.Book.Name)) continue;
+                if (userSales.Any(s => s.BookName == uniqUserSale.Book.Name)) continue;
                 
                 userSales.Add(new BookSaleStatisticRecord
                 {
-                    User = sale.User,
-                    BookName = uniqSale.Book.Name,
-                    SaleId = sale.Id.ToString(),
+                    User = userWhoHasSales,
+                    BookName = uniqUserSale.Book.Name,
+                    SaleId = userWhoHasSales.Id.ToString(),
                     Quantity = bookSalesCount,
                     VolumePoints = volumePoints
                 });
@@ -89,7 +89,7 @@ public class SalesService
             
             result.Add(new UserSalesStatisticRecord()
             {
-                User = sale.User,
+                User = userWhoHasSales,
                 Sales = userSales,
                 VolumePoints = userSales.Sum(s => s.VolumePoints),
                 TotalBookCount = userSales.Sum(s => s.Quantity)
