@@ -38,12 +38,15 @@ public class AddSale : PageModel
     {
         var book = await _bookService.GetById(viewModel.BookId);
         var user = await _portalUserService.GetById((User.Identity as Identity).Id);
-
+        DateTime date = viewModel.Date.LocalDateTime; 
+        DateTime.SpecifyKind(date, DateTimeKind.Utc);
+        date = date.Add(viewModel.Date.Offset);
+        
         var sale = new Sale()
         {
             Book = book,
             User = new PortalUserShort() {City = user.City, Id = user.Id, Name = user.Name},
-            Date = DateTime.Now,
+            Date = date, // viewModel.Date.ToLocalTime().DateTime,
             ContactName = viewModel.ContactName,
             ContactPhone = viewModel.ContactPhone
         };

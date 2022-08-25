@@ -12,4 +12,6 @@ public class SaleUpdateViewModel
     public string ContactPhone { get; set; }
 
     public string BookId { get; set; }
+    
+    public DateTimeOffset Date { get; set; } = DateTimeOffset.Now;
 }

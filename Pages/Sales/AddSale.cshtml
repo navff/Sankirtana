@@ -18,8 +18,8 @@
                 }
             </select>
         </div>
-        
-        <button type="submit" class="btn btn-lg btn-primary">Ушла!</button>
+        <input type="hidden" name="Date" id="Date"/>
+        <button type="submit" id="addSaleSubmit" onclick="OnAddSaleSubmit()" class="btn btn-lg btn-primary">Ушла!</button>
     </form>
     <br/>
     @if (@Model.Sales.Any())
@@ -64,6 +64,12 @@
            width: '100%'
         });
     });
+    
+    function OnAddSaleSubmit()
+        {
+          $('#Date').val(moment().format()); 
+          $('#addSaleSubmit').submit();
+        }
     
     function OnDeleteClick()
     {

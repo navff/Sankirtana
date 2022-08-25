@@ -12,7 +12,7 @@ public class Sale
     
     public PortalUserShort User { get; set; }
     
-    [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
+    [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
     public DateTime Date { get; set; }
     
     public string ContactName { get; set; }
