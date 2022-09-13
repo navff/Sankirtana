@@ -72,7 +72,8 @@ public class SalesService
             var userSales = new List<BookSaleStatisticRecord>();
             foreach (var uniqUserSale in filteredSales.Where(s => s.User.Id == userWhoHasSales.Id).DistinctBy(s => s.Book.Id))
             {
-                var bookSalesCount = filteredSales.Count(s => s.Book.Id == uniqUserSale.Book.Id);
+                var bookSalesCount = filteredSales.Count(s => s.Book.Id == uniqUserSale.Book.Id 
+                                                                  && s.User.Id == userWhoHasSales.Id);
                 var volumePoints = bookSalesCount * uniqUserSale.Book.VolumePoints;
                 
                 if (userSales.Any(s => s.BookName == uniqUserSale.Book.Name)) continue;

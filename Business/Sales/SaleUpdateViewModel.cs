@@ -1,7 +1,4 @@
-﻿using Sankirtana.Web.Business.Books;
-using Sankirtana.Web.Business.PortalUsers;
-
-namespace Sankirtana.Web.Business.Sales;
+﻿namespace Sankirtana.Web.Business.Sales;
 
 public class SaleUpdateViewModel
 {
