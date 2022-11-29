@@ -1,0 +1,64 @@
+﻿@page
+@model Sankirtana.Web.Pages.Sales.EditSale
+
+@{
+    ViewBag.Title = "Распространение";
+}
+
+<h1>@ViewBag.Title</h1>
+<br/>
+
+<div>
+    <form method="post">
+        <div class="mb-3">
+            <label for="Book" class="form-label">Книга</label>
+            <select class="form-control" id="Book" name="BookId">
+                @foreach (var book in Model.BookList)
+                {
+                    if (book.Id == Model.Sale.Book.Id)
+                    {
+                        <option value="@book.Id" selected="selected">@book.Name</option>
+                    }
+                    else
+                    {
+                        <option value="@book.Id">@book.Name</option> 
+                    }
+                    
+                }
+            </select>
+        </div>
+        <div class="mb-3 col-sm-5 col-md-3 ">
+            <label for="Count" class="form-label">Количество</label>
+            <input class="form-control" type="number" name="Count" id="Count" value="@Model.Sale.Count"/>
+        </div>
+        
+        <input type="hidden" name="Date" id="Date"/>
+        <button type="submit" id="addSaleSubmit" onclick="OnSubmit()" class="btn btn-lg btn-primary">Сохранить</button>
+    </form>
+    <br/>
+
+</div>
+
+
+<script>
+    $(document).ready(function() {
+        $('#Book').select2({
+           width: '100%'
+        });
+    });
+    
+    function OnSubmit()
+        {
+          $('#Date').val(moment().format()); 
+          $('#addSaleSubmit').submit();
+        }
+    
+    function OnDeleteClick()
+    {
+      if (confirm("Удалить?")) {
+        		return true;
+        	} else {
+        		return false;
+        	}
+    }
+</script>

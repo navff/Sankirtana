@@ -14,10 +14,14 @@ public class Sale
     
     [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
     public DateTime Date { get; set; }
+
+    public int Count { get; set; } = 1;
     
     public string ContactName { get; set; }
     
     public string ContactPhone { get; set; }
 
     public Book Book { get; set; }
+
+    public decimal VolumePoints => this.Book.VolumePoints * this.Count;
 }

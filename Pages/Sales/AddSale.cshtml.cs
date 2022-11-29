@@ -48,7 +48,8 @@ public class AddSale : PageModel
             User = new PortalUserShort() {City = user.City, Id = user.Id, Name = user.Name},
             Date = date, // viewModel.Date.ToLocalTime().DateTime,
             ContactName = viewModel.ContactName,
-            ContactPhone = viewModel.ContactPhone
+            ContactPhone = viewModel.ContactPhone,
+            Count = 1
         };
         
         await _salesService.AddSale(sale);

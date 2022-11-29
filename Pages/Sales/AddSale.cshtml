@@ -37,7 +37,7 @@
             @foreach (var sale in Model.Sales)
             {
                 <tr>
-                    <td><a href="~/sales/editSale?id=@sale.Id">@sale.Book.Name</a></td>
+                    <td><a href="~/sales/editSale?id=@sale.Id">@sale.Book.Name</a>@(sale.Count>1 ? $" ({sale.Count})" : "")</td>
                     <td>
                         <small>@sale.Date.ToShortTimeString()</small>
                     </td>

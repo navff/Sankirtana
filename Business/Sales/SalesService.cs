@@ -43,7 +43,7 @@ public class SalesService
             .ToListAsync();
         return result.ToList();
     }
-    
+
     public async Task<PeriodicStatistic> GetSalesStat(
         DateTime? dateStart, 
         DateTime? dateEnd)
@@ -72,8 +72,9 @@ public class SalesService
             var userSales = new List<BookSaleStatisticRecord>();
             foreach (var uniqUserSale in filteredSales.Where(s => s.User.Id == userWhoHasSales.Id).DistinctBy(s => s.Book.Id))
             {
-                var bookSalesCount = filteredSales.Count(s => s.Book.Id == uniqUserSale.Book.Id 
-                                                                  && s.User.Id == userWhoHasSales.Id);
+                var bookSalesCount = filteredSales.Where(s => s.Book.Id == uniqUserSale.Book.Id 
+                                                                  && s.User.Id == userWhoHasSales.Id)
+                                                  .Sum(s => s.Count);
                 var volumePoints = bookSalesCount * uniqUserSale.Book.VolumePoints;
                 
                 if (userSales.Any(s => s.BookName == uniqUserSale.Book.Name)) continue;
@@ -100,12 +101,12 @@ public class SalesService
         return new PeriodicStatistic
         {
             Records = result,
-            TotalBookCount = filteredSales.Count,
-            MahaBig = filteredSales.Count(s => s.Book.Category == "MahaBig"),
-            Big = filteredSales.Count(s => s.Book.Category == "Big"),
-            Medium = filteredSales.Count(s => s.Book.Category == "Medium"),
-            Small = filteredSales.Count(s => s.Book.Category == "Small"),
-            VolumePoints = filteredSales.Sum(s => s.Book.VolumePoints)
+            TotalBookCount = filteredSales.Sum(s => s.Count),
+            MahaBig = filteredSales.Where(s => s.Book.Category == "MahaBig").Sum(s => s.Count),
+            Big = filteredSales.Where(s => s.Book.Category == "Big").Sum(s => s.Count),
+            Medium = filteredSales.Where(s => s.Book.Category == "Medium").Sum(s => s.Count),
+            Small = filteredSales.Where(s => s.Book.Category == "Small").Sum(s => s.Count),
+            VolumePoints = filteredSales.Sum(s => s.VolumePoints)
         };
     }
 
