@@ -44,8 +44,9 @@ jobs:
             revision-service-account-id: ajevd85hi4q5rgcernn2
             revision-cores: 1
             revision-memory: 256Mb
-            revision-core-fraction: 100
+            revision-core-fraction: 5
             revision-concurrency: 8
             revision-image-url: cr.yandex/crp4odt1er9cmqarghdb/sankirtana:${{ github.sha }}
             revision-execution-timeout: 60
+            revision-provisioned: 1
             revision-env: YA_OBJECT_STORAGE_SECRET_KEY=${{ secrets.YA_OBJECT_STORAGE_SECRET_KEY }}
