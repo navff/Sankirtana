@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Driver;
+using Sankirtana.Web.Business.Books;
 using Sankirtana.Web.Common;
 
 namespace Sankirtana.Web.Business.Sales;
@@ -85,7 +86,8 @@ public class SalesService
                     BookName = uniqUserSale.Book.Name,
                     SaleId = userWhoHasSales.Id.ToString(),
                     Quantity = bookSalesCount,
-                    VolumePoints = volumePoints
+                    VolumePoints = volumePoints,
+                    Category = uniqUserSale.Book.Category
                 });
             }
             
@@ -94,7 +96,11 @@ public class SalesService
                 User = userWhoHasSales,
                 Sales = userSales,
                 VolumePoints = userSales.Sum(s => s.VolumePoints),
-                TotalBookCount = userSales.Sum(s => s.Quantity)
+                TotalBookCount = userSales.Sum(s => s.Quantity),
+                MahaBig = userSales.Where(s => s.Category == BookCategory.MahaBig).Sum(s => s.Quantity),
+                Big = userSales.Where(s => s.Category == BookCategory.Big).Sum(s => s.Quantity),
+                Medium = userSales.Where(s => s.Category == BookCategory.Medium).Sum(s => s.Quantity),
+                Small = userSales.Where(s => s.Category == BookCategory.Small).Sum(s => s.Quantity)
             });
         }
         

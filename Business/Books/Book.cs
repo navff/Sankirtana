@@ -30,3 +30,11 @@ public class Book
         };
     }
 }
+
+public static class BookCategory
+{
+    public const string MahaBig = "MahaBig";
+    public const string Big = "Big";
+    public const string Medium = "Medium";
+    public const string Small = "Small";
+}
