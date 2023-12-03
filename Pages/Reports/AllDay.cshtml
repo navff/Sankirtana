@@ -4,7 +4,10 @@
 @{
     ViewBag.Title = "Статистика";
 }
+
 <h1>Статистика</h1>
+
+<script src="https://cdn.zingchart.com/zingchart.min.js"></script>
 
 <section class="container">
     <form id="dateRange" class="row" method="get">
@@ -29,24 +32,35 @@
 else
 {
     <div style="margin-top: 20px">
+        @if (Model.DateStart.Date == new DateTime(2023, 12, 1))
+        {
+            <div id='myChart'><a class="zc-ref" href="https://www.zingchart.com/">Charts by ZingChart</a></div>
+            <script src="~/js/gauge.js" asp-append-version="true"></script>
+            <script>
+                renderGauge(@Model.Statistic.TotalBookCount);
+            </script>
+    
+            <div class="clearfix"></div>    
+        }
+        
         <div class="row">
             <div class="col-sm-3">
                 <small>
                     Книг: @Model.Statistic.TotalBookCount<br/>
                     Баллов: @Model.Statistic.VolumePoints
-                </small>        
+                </small>
             </div>
             <div class="col-sm-3">
                 <small>
                     Маха-Биг: @Model.Statistic.MahaBig<br/>
                     Биг: @Model.Statistic.Big
-                </small> 
+                </small>
             </div>
             <div class="col-sm-3">
                 <small>
                     Средние: @Model.Statistic.Medium<br/>
                     Маленькие: @Model.Statistic.Small
-                </small> 
+                </small>
             </div>
         </div>
     </div>
@@ -88,7 +102,6 @@ $(function() {
 
     var start = moment(new Date('@Model.DateStart.ToString("yyyy-MM-dd")'));
     var end = moment(new Date('@Model.DateEnd.ToString("yyyy-MM-dd")'));
-    console.log('END: ' + end);
     
     function setRangeInControl(start, end) {
         $('#reportrange span').html(start.format('DD.MM.YYYY') + ' — ' + end.format('DD.MM.YYYY'));

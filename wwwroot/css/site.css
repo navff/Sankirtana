@@ -31,3 +31,15 @@ body {
 .input-group-append {
   cursor: pointer;
 }
+
+#myChart {
+  height: 100%;
+  width: 100%;
+  min-height: 150px;
+  margin-bottom: 50px;
+  padding: 10px;
+}
+
+.zc-ref {
+  display: none;
+}

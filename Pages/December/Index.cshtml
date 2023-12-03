@@ -1,0 +1,56 @@
+﻿@page
+@model Sankirtana.Web.Pages.December.Index
+
+
+@{
+    ViewBag.Title = "Статистика";
+}
+<h1>Декабрьский марафон</h1>
+
+<section class="container">
+    <form id="dateRange" class="row" method="get">
+        <div id="reportrange" 
+             style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%; max-width: 300px;">
+            <i class="bi bi-calendar-range"></i>&nbsp;
+            <span></span> <i class="bi bi-caret-down" style="float: right"></i>
+        </div>
+        <input type="hidden" id="DateStart" name="DateStart"/>
+        <input type="hidden" id="DateEnd" name="DateEnd"/>
+    </form>
+</section>
+
+@if (!Model.Statistic.Records.Any())
+{
+    <div>
+        <br/>
+        <p>Ничего не распространили =(</p>
+    </div>
+    
+}
+else
+{
+    <div style="margin-top: 20px">
+        <div class="row">
+            <div class="col-sm-3">
+                <small>
+                    Книг: @Model.Statistic.TotalBookCount<br/>
+                    Баллов: @Model.Statistic.VolumePoints
+                </small>        
+            </div>
+            <div class="col-sm-3">
+                <small>
+                    Маха-Биг: @Model.Statistic.MahaBig<br/>
+                    Биг: @Model.Statistic.Big
+                </small> 
+            </div>
+            <div class="col-sm-3">
+                <small>
+                    Средние: @Model.Statistic.Medium<br/>
+                    Маленькие: @Model.Statistic.Small
+                </small> 
+            </div>
+        </div>
+    </div>
+}
+
+
