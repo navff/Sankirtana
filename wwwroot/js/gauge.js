@@ -2,10 +2,13 @@
     var myConfig = {
         type: "gauge",
         globals: {
-            fontSize: 17
+            fontSize: 16
         },
         plotarea: {
-            marginTop: 80
+            marginTop: 30,
+            marginLeft:40,
+            marginRight: 50,
+            
         },
         plot: {
             size: '100%',
@@ -56,7 +59,7 @@
                 }]
             },
             ring: {
-                size: 70,
+                size: 40,
                 rules: [
                     {
                         rule: '%v <= 1108',
