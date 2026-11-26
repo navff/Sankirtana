@@ -63,5 +63,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapRazorPages();
+app.MapGet("/people/addNewSoul", () => Results.Redirect("/Dashboard"));
 
 app.Run();

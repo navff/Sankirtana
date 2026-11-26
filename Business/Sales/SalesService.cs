@@ -116,6 +116,16 @@ public class SalesService
         };
     }
 
+    public Task<List<Sale>> GetSalesForMonth(DateTime monthStart, CancellationToken cancellationToken)
+    {
+        // Sales are stored with their reporting date in UTC-kind fields.
+        var start = DateTime.SpecifyKind(monthStart, DateTimeKind.Utc);
+        var end = start.AddMonths(1);
+        return _dbStore.DB.GetCollection<Sale>("sales")
+            .Find(sale => sale.Date >= start && sale.Date < end)
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task DeleteSale(string id)
     {
         var sales = _dbStore.DB.GetCollection<Sale>("sales");

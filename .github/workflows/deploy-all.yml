@@ -49,4 +49,6 @@ jobs:
             revision-image-url: cr.yandex/crp4odt1er9cmqarghdb/sankirtana:${{ github.sha }}
             revision-execution-timeout: 60
             revision-provisioned: 1
-            revision-env: YA_OBJECT_STORAGE_SECRET_KEY=${{ secrets.YA_OBJECT_STORAGE_SECRET_KEY }}
+            revision-env: |
+              YA_OBJECT_STORAGE_SECRET_KEY=${{ secrets.YA_OBJECT_STORAGE_SECRET_KEY }}
+              MONTHLY_BOOK_GOAL=10000

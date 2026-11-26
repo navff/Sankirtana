@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta name="robots" content="noindex"/> 
     <meta charset="utf-8"/>
@@ -39,7 +39,8 @@
                         <a class="nav-link text-dark" asp-area="" asp-page="/reports/allday">Статистика</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-page="/people/addNewSoul">Люди</a>
+                        <a class="nav-link text-dark" asp-area="" asp-page="/Dashboard/Index"
+                           aria-current="@(ViewContext.RouteData.Values["page"]?.ToString() == "/Dashboard/Index" ? "page" : null)">Дашборд</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-page="/books/index">Книги</a>

@@ -1,0 +1,164 @@
+@page
+@using System.Globalization
+@model Sankirtana.Web.Pages.Dashboard.Index
+@{
+    ViewData["Title"] = "Дашборд";
+    var stats = Model.Statistic;
+    var culture = Sankirtana.Web.Pages.Dashboard.Index.DisplayCulture;
+    var categoryColors = new[] { "#205d50", "#75a881", "#d6e897", "#e7ac77", "#aab9c3" };
+    var categoryStops = new List<string>();
+    var categoryOffset = 0L;
+
+    string Count(long value) => value.ToString("N0", culture);
+    string CssNumber(decimal value) => value.ToString("0.####", CultureInfo.InvariantCulture);
+
+    foreach (var (category, index) in stats.Categories.Select((category, index) => (category, index)))
+    {
+        if (category.Count <= 0 || stats.TotalBooks <= 0) continue;
+        var from = CssNumber(100m * categoryOffset / stats.TotalBooks);
+        categoryOffset += category.Count;
+        var to = CssNumber(100m * categoryOffset / stats.TotalBooks);
+        categoryStops.Add($"{categoryColors[index]} {from}% {to}%");
+    }
+}
+
+@section Scripts {
+    <link rel="stylesheet" href="~/css/dashboard.css" asp-append-version="true" />
+    <script src="~/js/dashboard.js" asp-append-version="true" defer></script>
+}
+
+<div class="distribution-dashboard">
+    <header class="dashboard-heading">
+        <div>
+            <h1>Дашборд</h1>
+            <p>Распространение книг</p>
+        </div>
+        <nav class="dashboard-period" aria-label="Месяц отчёта">
+            <a asp-page="./Index" asp-route-month="@Model.AdjacentMonth(-1)" aria-label="Предыдущий месяц">
+                <span class="period-arrow previous" aria-hidden="true"></span>
+            </a>
+            <time datetime="@Model.MonthValue">@Model.MonthLabel</time>
+            <a asp-page="./Index" asp-route-month="@Model.AdjacentMonth(1)" aria-label="Следующий месяц">
+                <span class="period-arrow" aria-hidden="true"></span>
+            </a>
+        </nav>
+    </header>
+
+    @if (Model.Goal is int goal)
+    {
+        var angle = CssNumber(Math.Clamp(Model.GoalPercent, 0m, 100m) * 2.4m);
+        <section class="goal-panel" aria-labelledby="monthly-goal-heading">
+            <div class="goal-copy">
+                <h2 id="monthly-goal-heading">Цель на месяц</h2>
+                <div class="goal-totals">
+                    <strong>@Count(stats.TotalBooks)</strong><span>из @Count(goal) книг</span>
+                </div>
+                <p>@(Model.Remaining > 0 ? $"До цели осталось {Count(Model.Remaining)}" : "Цель достигнута")</p>
+            </div>
+            <div class="goal-gauge" style="--goal-angle: @(angle)deg">
+                <div class="goal-scale" aria-hidden="true">
+                    <div class="goal-arc"></div>
+                    <div class="goal-ticks"></div>
+                    <div class="goal-needle"></div>
+                </div>
+                <div class="goal-gauge-value">
+                    <strong>@Model.GoalPercent.ToString("0.#", culture)%</strong>
+                    <span>от цели</span>
+                </div>
+                <div class="goal-gauge-labels" aria-hidden="true"><span>0</span><span>@Count(goal)</span></div>
+            </div>
+        </section>
+    }
+
+    <dl class="dashboard-totals" aria-label="Итоги за месяц">
+        <div>
+            <dt>Книг распространено</dt>
+            <dd>@Count(stats.TotalBooks)</dd>
+        </div>
+        <div>
+            <dt>Участников</dt>
+            <dd>@Count(stats.Participants)</dd>
+        </div>
+        <div>
+            <dt>Баллов</dt>
+            <dd>@stats.VolumePoints.ToString("#,0.##", culture)</dd>
+        </div>
+    </dl>
+
+    <div class="dashboard-grid">
+        <section class="dashboard-panel daily-panel" aria-labelledby="daily-heading">
+            <h2 id="daily-heading">Динамика по дням</h2>
+            @if (stats.TotalBooks > 0)
+            {
+                <p class="panel-caption">Книг за день</p>
+                <div class="daily-chart" data-month="@Model.MonthValue" data-days="@Model.ElapsedDays"
+                     data-counts="@string.Join(",", stats.DailyBooks)">
+                    <canvas aria-hidden="true"></canvas>
+                    <output class="daily-tooltip" hidden></output>
+                </div>
+                <details class="daily-data">
+                    <summary>Данные по дням</summary>
+                    <table>
+                        <thead><tr><th scope="col">Дата</th><th scope="col">Книг</th></tr></thead>
+                        <tbody>
+                        @for (var index = 0; index < Model.ElapsedDays; index++)
+                        {
+                            <tr>
+                                <th scope="row">@Model.Month.AddDays(index).ToString("d MMMM", culture)</th>
+                                <td>@Count(stats.DailyBooks[index])</td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </details>
+            }
+            else
+            {
+                <p class="dashboard-empty">За этот месяц пока нет записей о распространении.</p>
+            }
+        </section>
+
+        <section class="dashboard-panel category-panel" aria-labelledby="category-heading">
+            <h2 id="category-heading">Категории книг</h2>
+            <div class="category-chart">
+                <div class="category-ring" style="@(categoryStops.Count > 0 ? $"background: conic-gradient({string.Join(", ", categoryStops)})" : null)" aria-hidden="true">
+                    <div><strong>@Count(stats.TotalBooks)</strong><span>всего книг</span></div>
+                </div>
+                <ul class="category-legend">
+                    @for (var index = 0; index < stats.Categories.Count; index++)
+                    {
+                        var category = stats.Categories[index];
+                        <li>
+                            <span class="category-color" style="--category-color: @categoryColors[index]" aria-hidden="true"></span>
+                            <span>@category.Name</span>
+                            <strong>@Count(category.Count)</strong>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </section>
+
+        <section class="dashboard-panel books-panel" aria-labelledby="books-heading">
+            <h2 id="books-heading">Самые распространённые книги</h2>
+            @if (stats.TopBooks.Count > 0)
+            {
+                <ol class="ranked-books">
+                    @foreach (var book in stats.TopBooks)
+                    {
+                        <li>
+                            <span>@book.Name</span>
+                            <div class="book-bar" aria-hidden="true">
+                                <span style="width: @(CssNumber(100m * book.Count / stats.TopBooks[0].Count))%"></span>
+                            </div>
+                            <strong>@Count(book.Count)</strong>
+                        </li>
+                    }
+                </ol>
+            }
+            else
+            {
+                <p class="dashboard-empty">Книги появятся здесь после первых записей за месяц.</p>
+            }
+        </section>
+    </div>
+</div>

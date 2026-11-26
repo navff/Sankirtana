@@ -14,14 +14,16 @@
       "launchBrowser": true,
       "applicationUrl": "http://localhost:9999",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "MONTHLY_BOOK_GOAL": "10000"
       }
     },
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "MONTHLY_BOOK_GOAL": "10000"
       }
     }
   }
