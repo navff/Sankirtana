@@ -1,118 +1,41 @@
-﻿using System.Security.Principal;
+using System.Security.Principal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Sankirtana.Web.Business.PortalUsers;
 
 namespace Sankirtana.Web.Common;
 
-/// <summary>
-    /// Аффтаризовывает пользователя по токену в http-заголовке «Authorization»
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
-    public class RESTAuthorizeAttribute : Attribute, IAsyncAuthorizationFilter
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, Inherited = true)]
+public sealed class RESTAuthorizeAttribute : Attribute, IAsyncAuthorizationFilter
+{
+    private readonly string[] _roles;
+
+    public RESTAuthorizeAttribute(params string[] roles)
     {
-        private string[] _roles;
-
-
-        /// <summary>
-        /// Позволяет заходить всем зарегистрированным пользователям
-        /// </summary>
-        //public RESTAuthorizeAttribute() : this(Role.PortalAdmin, Role.PortalManager, Role.RegisteredUser)
-        //{
-        //}
-
-        /// <summary>
-        /// Аффтаризация. Принимает массив ролей в строках
-        /// </summary>
-        /// <param name="roles"></param>
-        public RESTAuthorizeAttribute(params  string[] roles)
-        {
-            this._roles = roles;
-        }
-
-        /// <summary>
-        /// /// Аффтаризация. Принимает массив ролей в енумах
-        /// </summary>
-        /// <param name="ro/les"></param>
-       // public RESTAuthorizeAttribute(params Role[] roles)
-        // {
-            // var rolesList = new List<string>();
-            // foreach (Role role in roles)
-            // {
-                // rolesList.Add(role.ToString());
-            // }
-            // this._roles = rolesList.ToArray();
-        // }
-
-
-        /// <summary>
-        /// Вызывается каждый раз при поступлении запроса
-        /// </summary>
-        /// <param name="actionContext"></param>
-        /*public override void OnAuthorization(HttpActionContext actionContext)
-        {
-            var token = actionContext.Request.Headers.Authorization?.Parameter;
-            if (string.IsNullOrWhiteSpace(token))
-            {
-                actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized)
-                {
-                    Content = new StringContent("Token is null")
-                };
-                return;
-            }
-            using (var context = new HobbyContext())
-            {
-                var userOperations = new UserOperations(context);
-                var user = userOperations.GetUserByToken(token);
-
-                if (user == null)
-                {
-                    actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized)
-                    {
-                        Content = new StringContent("User with this token is not found")
-                    };
-                    return;
-                }
-
-                if (_roles != null)
-                {
-                    if (!_roles.Contains(user.Role.ToString()))
-                    {
-                        actionContext.Response = new HttpResponseMessage(HttpStatusCode.Forbidden)
-                        {
-                            Content = new StringContent("Your role is too small")
-                        };
-                        return;
-                    }
-                }
-
-                var identity = new Identity { Name = user.Email, IsAuthenticated = true };
-                actionContext.RequestContext.Principal = new GenericPrincipal(identity, new[] { user.Role.ToString() });
-            }
-            
-        }*/
-
-        public void Dispose()
-        {
-        }
-
-        public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
-        {
-            var token = context.HttpContext.Request.Cookies["Token"];
-            if (token == null)
-            {
-                context.Result = new ForbidResult();
-                return;
-            }
-
-            var userService = context.HttpContext.RequestServices.GetRequiredService<PortalUserService>();
-            var user = await userService.GetByToken(token);
-            if (user == null)
-            {
-                context.Result = new ForbidResult();
-                return;
-            }
-
-            context.HttpContext.User = new GenericPrincipal(new Identity() {Name = user.Name, IsAuthenticated = true, Id = user.Id.ToString()}, new []{user.Role});
-        }
+        _roles = roles;
     }
+
+    public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
+    {
+        var token = context.HttpContext.Request.Cookies["Token"];
+        if (string.IsNullOrWhiteSpace(token))
+        {
+            context.Result = new ForbidResult();
+            return;
+        }
+
+        var userService = context.HttpContext.RequestServices.GetRequiredService<PortalUserService>();
+        var user = await userService.GetByToken(token);
+        var role = user?.EffectiveRole;
+        if (user == null ||
+            (_roles.Length > 0 && !_roles.Contains(role, StringComparer.OrdinalIgnoreCase)))
+        {
+            context.Result = new ForbidResult();
+            return;
+        }
+
+        var identity = new Identity { Name = user.Name, IsAuthenticated = true, Id = user.Id.ToString() };
+        var roles = string.IsNullOrWhiteSpace(role) ? Array.Empty<string>() : new[] { role };
+        context.HttpContext.User = new GenericPrincipal(identity, roles);
+    }
+}

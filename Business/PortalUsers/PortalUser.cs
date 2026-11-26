@@ -4,6 +4,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Sankirtana.Web.Business.PortalUsers;
 
+[BsonIgnoreExtraElements]
 public class PortalUser
 {
     [BsonRepresentation(BsonType.ObjectId)]
@@ -18,12 +19,6 @@ public class PortalUser
     [Display(Name = "Имя, фамилия")]
     public string Name => FirstName + " " + LastName;
 
-    [Display(Name = "Email")]
-    public string Email { get; set; }
-    
-    [Display(Name = "Номер телефона")]
-    public string Phone { get; set; }
-    
     [Display(Name = "Токен для аутентификации")]
     public string Token { get; set; }
     
@@ -31,6 +26,15 @@ public class PortalUser
     public string City { get; set; }
     
     public string Role { get; set; }
+
+    [BsonIgnoreIfDefault]
+    public bool RoleAssignedByAdministrator { get; set; }
+
+    [BsonIgnore]
+    public string? EffectiveRole =>
+        !RoleAssignedByAdministrator && string.Equals(Role, PortalRoles.Administrator, StringComparison.OrdinalIgnoreCase)
+            ? PortalRoles.Seller
+            : Role;
 }
 
 public class PortalUserShort

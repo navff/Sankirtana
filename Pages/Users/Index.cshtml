@@ -13,8 +13,7 @@
     <tr>
       <th scope="col">Полное имя</th>
       <th scope="col">Город</th>
-      <th scope="col">Телефон</th>
-      <th scope="col">Почта</th>
+      <th scope="col">Роль</th>
       <th scope="col">Действия</th>
     </tr>
     </thead>
@@ -24,10 +23,15 @@
       <tr>
         <td><a href="~/users/edituser?id=@user.Id">@user.Name</a></td>
         <td>@user.City</td>
-        <td>@user.Phone</td>
-        <td>@user.Email</td>
+        <td>@(user.EffectiveRole switch
+          {
+              PortalRoles.Administrator => "Администратор",
+              PortalRoles.Reader => "Читатель",
+              PortalRoles.Seller => "Санкиртанщик",
+              _ => user.EffectiveRole
+          })</td>
         <td>
-          <form method="post" action="~/users/DeleteUser">
+          <form method="post" asp-page="/Users/DeleteUser">
             <input type="hidden" name="id" value="@user.Id"/>
             <input type="submit" class="btn btn-sm btn-danger" onclick="return OnDeleteClick()" value="Удалить"/>
           </form>

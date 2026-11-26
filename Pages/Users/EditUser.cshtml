@@ -6,43 +6,38 @@
 }
 
 <div>
-    <form method="post">
-        <input type="hidden" value="@Model.User.Id" name="Id"/>
+    <form method="post" asp-antiforgery="true">
+        <input type="hidden" value="@Model.EditedUser.Id" name="Id"/>
         <div class="mb-3">
             <label for="firstName" class="form-label">Имя</label>
-            <input type="text" class="form-control" id="firstName" aria-describedby="firstNameHelp" name="FirstName" value="@Model.User.FirstName">
+            <input type="text" class="form-control" id="firstName" name="FirstName" value="@Model.EditedUser.FirstName">
         </div>
         <div class="mb-3">
             <label for="lastName" class="form-label">Фамилия</label>
-            <input type="text" class="form-control" id="lastName" name="LastName" aria-describedby="vpHelp" value="@Model.User.LastName">
-        </div>
-        <div class="mb-3">
-            <label for="Phone" class="form-label">Телефон</label>
-            <input type="text" class="form-control" id="Phone" name="Phone" aria-describedby="PhoneHelp" value="@Model.User.Phone">
-        </div>
-        <div class="mb-3">
-            <label for="Email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="Email" name="Email" aria-describedby="EmailHelp" value="@Model.User.Email">
+            <input type="text" class="form-control" id="lastName" name="LastName" value="@Model.EditedUser.LastName">
         </div>
         <div class="mb-3">
             <label for="City" class="form-label">Город</label>
             <select class="form-select" name="City" id="City">
-                <!option @(Model.User.City=="Череповец" ? "selected" : "") value="Череповец">Череповец</!option>
-                <!option @(Model.User.City=="Вологда" ? "selected" : "") value="Вологда">Вологда</!option>
+                <option value="Череповец" selected="@(Model.EditedUser.City == "Череповец")">Череповец</option>
+                <option value="Вологда" selected="@(Model.EditedUser.City == "Вологда")">Вологда</option>
             </select>
         </div>
         
         <div class="mb-3">
             <label for="Role" class="form-label">Роль</label>
             <select class="form-select" name="Role" id="Role">
-                <!option @(Model.User.Role=="Seller" ? "selected" : "") value="Seller">Санкиртанщик</!option>
-                <!option @(Model.User.Role=="Admin" ? "selected" : "") value="Admin">Администратор</!option>
-                <!option @(Model.User.Role=="Reader" ? "selected" : "") value="Reader">Читатель</!option>
+                <option value="@PortalRoles.Seller" selected="@(Model.EditedUser.EffectiveRole == PortalRoles.Seller)">Санкиртанщик</option>
+                <option value="@PortalRoles.Administrator" selected="@(string.Equals(Model.EditedUser.EffectiveRole, PortalRoles.Administrator, StringComparison.OrdinalIgnoreCase))">Администратор</option>
+                <option value="@PortalRoles.Reader" selected="@(Model.EditedUser.EffectiveRole == PortalRoles.Reader)">Читатель</option>
             </select>
         </div>
-        <div class="mb-3">
-            <small>@Request.Host/auth/logon?token=@Model.User.Token</small>
-        </div>
-        <button type="submit" class="btn btn-primary">Отправить</button>
+        @if (!string.IsNullOrEmpty(Model.EditedUser.Token))
+        {
+            <div class="mb-3">
+                <small>@Request.Host/auth/logon?token=@Model.EditedUser.Token</small>
+            </div>
+        }
+        <button type="submit" class="btn btn-primary">Сохранить</button>
     </form>
 </div>

@@ -41,6 +41,7 @@ builder.Services
 builder.Services.AddSingleton(HtmlEncoder.Create(allowedRanges: new[] { UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic }));
 builder.Services.AddSingleton<EnvironmentConfig>();
 builder.Services.AddSingleton<DbStore>();
+builder.Services.AddSingleton<InitialAdministratorSetup>();
 builder.Services.AddTransient<BookService>();
 builder.Services.AddTransient<PortalUserService>();
 builder.Services.AddTransient<SalesService>();

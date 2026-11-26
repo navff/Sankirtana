@@ -2,36 +2,46 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MongoDB.Bson;
 using Sankirtana.Web.Business.PortalUsers;
+using Sankirtana.Web.Common;
 
 namespace Sankirtana.Web.Pages;
 
+[RESTAuthorize(PortalRoles.Administrator)]
+[AutoValidateAntiforgeryToken(Order = 1100)]
+[ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
 public class EditUser : PageModel
 {
     private PortalUserService _portalUserService;
     
     // Если взяли пользователя на редактирование
-    public PortalUser User { get; set; }
+    public PortalUser EditedUser { get; set; } = new();
     
     public EditUser(PortalUserService portalUserService)
     {
         _portalUserService = portalUserService;
     }
 
-    public async Task OnGet(string? id)
+    public async Task<IActionResult> OnGet(string? id)
     {
-        if (!string.IsNullOrEmpty(id))
-        {
-            this.User = await _portalUserService.GetById(id);
-        }
-        else
-        {
-            this.User = new PortalUser();    
-        }
+        if (string.IsNullOrEmpty(id)) return Page();
+        if (!ObjectId.TryParse(id, out _)) return BadRequest();
+
+        var user = await _portalUserService.GetById(id);
+        if (user == null) return NotFound();
+
+        EditedUser = user;
+        return Page();
     }
     
     public async Task<IActionResult> OnPost(PortalUserUpdateViewModel userViewModel)
     {
-        if (userViewModel.Id == ObjectId.Empty.ToString())
+        if (!ObjectId.TryParse(userViewModel.Id, out var id) ||
+            userViewModel.Role is not (PortalRoles.Administrator or PortalRoles.Seller or PortalRoles.Reader))
+        {
+            return BadRequest();
+        }
+
+        if (id == ObjectId.Empty)
         {
             await _portalUserService.AddUser(userViewModel.ToUser());
         }

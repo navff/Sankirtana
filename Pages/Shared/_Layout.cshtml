@@ -45,6 +45,12 @@
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-page="/books/index">Книги</a>
                     </li>
+                    @if (User.IsInRole(PortalRoles.Administrator))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-page="/Users/Index">Пользователи</a>
+                        </li>
+                    }
                 </ul>
             </div>
         </div>

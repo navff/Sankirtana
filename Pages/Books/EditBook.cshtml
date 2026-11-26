@@ -1,31 +1,34 @@
-﻿@page
+@page
+@using Sankirtana.Web.Business.Books
 @model Sankirtana.Web.Pages.EditBook
 
 @{
-    
+    ViewData["Title"] = Model.IsNew ? "Добавить книгу" : "Редактировать книгу";
 }
 
-<div>
-    <form method="post">
-        <input type="hidden" value="@Model.Book.Id" name="Id"/>
-        <div class="mb-3">
-            <label for="bookName" class="form-label">Название книги</label>
-            <input type="text" class="form-control" id="bookName" aria-describedby="nameHelp" name="name" value="@Model.Book.Name">
-            <div id="nameHelp" class="form-text">Введите тут название книги</div>
-        </div>
-        <div class="mb-3">
-            <p>Очки: @Model.Book.VolumePoints</p>
-        </div>
-        <div class="mb-3">
-                    <label for="Category" class="form-label">Категория</label>
-            <select class="form-select" name="Category" id="Category">
-                <!option value="">--- Не выбрано ---</!option>
-                <!option @(Model.Book.Category == "MahaBig" ? "selected" : "") value="MahaBig">Маха-Биг</!option>
-                <!option @(Model.Book.Category == "Big" ? "selected" : "") value="Big">Биг</!option>
-                <!option @(Model.Book.Category == "Medium" ? "selected" : "") value="Medium">Средняя</!option>
-                <!option @(Model.Book.Category == "Small" ? "selected" : "") value="Small">Маленькая</!option>
-            </select>
-                </div>
-        <button type="submit" class="btn btn-primary">Сохранить</button>
-    </form>
-</div>
+<h1>@ViewData["Title"]</h1>
+<form method="post" asp-antiforgery="true">
+    <input type="hidden" asp-for="Input.Id" />
+    <div class="mb-3">
+        <label asp-for="Input.Name" class="form-label"></label>
+        <input asp-for="Input.Name" class="form-control" />
+        <span asp-validation-for="Input.Name" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Input.Category" class="form-label"></label>
+        <select asp-for="Input.Category" class="form-select">
+            <option value="">Не выбрано</option>
+            <option value="@BookCategory.MahaBig">Маха-Биг</option>
+            <option value="@BookCategory.Big">Биг</option>
+            <option value="@BookCategory.Medium">Средняя</option>
+            <option value="@BookCategory.Small">Маленькая</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Input.VolumePoints" class="form-label"></label>
+        <input asp-for="Input.VolumePoints" class="form-control" inputmode="decimal" aria-describedby="volume-points-help" />
+        <div id="volume-points-help" class="form-text">Пустое поле оставит стандартные баллы выбранной категории.</div>
+        <span asp-validation-for="Input.VolumePoints" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+</form>

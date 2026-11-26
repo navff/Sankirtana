@@ -7,16 +7,19 @@ namespace Sankirtana.Web.Business.PortalUsers;
 public class PortalUserService
 {
     private readonly DbStore _dbStore;
+    private readonly InitialAdministratorSetup _initialAdministrators;
 
-    public PortalUserService(DbStore dbStore)
+    public PortalUserService(DbStore dbStore, InitialAdministratorSetup initialAdministrators)
     {
         _dbStore = dbStore;
+        _initialAdministrators = initialAdministrators;
     }
     
     public async Task<PortalUsers.PortalUser> AddUser(PortalUsers.PortalUser user)
     {
-        user.Id =ObjectId.GenerateNewId();
+        user.Id = ObjectId.GenerateNewId();
         user.Token = Guid.NewGuid().ToString();
+        user.RoleAssignedByAdministrator = true;
         var users = _dbStore.DB.GetCollection<PortalUsers.PortalUser>("users");
         await users.InsertOneAsync(user);
         Console.WriteLine("ID:" + user.Id);
@@ -50,9 +53,9 @@ public class PortalUserService
     
     public async Task<PortalUsers.PortalUser?> GetByToken(string token)
     {
+        await _initialAdministrators.EnsureAsync();
         var users = _dbStore.DB.GetCollection<PortalUsers.PortalUser>("users");
-        var user = await users.Find(u => u.Token == token).FirstOrDefaultAsync();
-        return user;
+        return await users.Find(u => u.Token == token).FirstOrDefaultAsync();
     }
 
     public async Task<PortalUsers.PortalUser> EditUser(PortalUsers.PortalUser user)
@@ -71,7 +74,14 @@ public class PortalUserService
         }
 
         var users = _dbStore.DB.GetCollection<PortalUsers.PortalUser>("users");
-        await users.ReplaceOneAsync(new BsonDocument("_id", user.Id), user);
+        var update = Builders<PortalUser>.Update
+            .Set(existing => existing.FirstName, user.FirstName)
+            .Set(existing => existing.LastName, user.LastName)
+            .Set(existing => existing.City, user.City)
+            .Set(existing => existing.Token, user.Token)
+            .Set(existing => existing.Role, user.Role)
+            .Set(existing => existing.RoleAssignedByAdministrator, true);
+        await users.UpdateOneAsync(existing => existing.Id == user.Id, update);
         return user;
     }
 }
