@@ -3,15 +3,11 @@
 
 @{
   ViewBag.Title = "Справочник книг";
-  var canManageBooks = User.IsInRole(PortalRoles.Administrator);
 }
 
 <div class="page-heading">
   <h1>@ViewBag.Title</h1>
-  @if (canManageBooks)
-  {
-    <a asp-page="/Books/EditBook" class="btn btn-primary">Добавить книгу</a>
-  }
+  <a asp-page="/Books/EditBook" class="btn btn-primary">Добавить книгу</a>
 </div>
 <div class="table-responsive table-surface">
   <table class="table">
@@ -20,37 +16,24 @@
       <th scope="col">Название</th>
       <th scope="col">Категория</th>
       <th scope="col">Баллы</th>
-      @if (canManageBooks)
-      {
-        <th scope="col" class="text-end">Действия</th>
-      }
+      <th scope="col" class="text-end">Действия</th>
     </tr>
     </thead>
     <tbody>
     @foreach (var book in Model.BookList)
     {
       <tr>
-        <td>
-          @if (canManageBooks)
-          {
-            <a asp-page="/Books/EditBook" asp-route-id="@book.Id">@book.Name</a>
-          }
-          else
-          {
-            @book.Name
-          }
-        </td>
+        <td><a asp-page="/Books/EditBook" asp-route-id="@book.Id">@book.Name</a></td>
         <td>@book.Category</td>
         <td>@book.VolumePoints</td>
-        @if (canManageBooks)
-        {
-          <td class="text-end">
-            <form method="post" asp-page="/Books/DeleteBook">
-              <input type="hidden" name="id" value="@book.Id"/>
-              <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Удалить книгу?')">Удалить</button>
-            </form>
-          </td>
-        }
+        <td class="text-end">
+          <form method="post" asp-page="/Books/DeleteBook">
+            <input type="hidden" name="id" value="@book.Id"/>
+            <button type="submit" class="btn btn-sm btn-danger" aria-label="Удалить книгу" onclick="return confirm('Удалить книгу?')">
+              <i class="bi bi-trash" aria-hidden="true"></i>
+            </button>
+          </form>
+        </td>
       </tr>
     }
     </tbody>
