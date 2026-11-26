@@ -51,4 +51,4 @@ jobs:
             revision-provisioned: 1
             revision-env: |
               YA_OBJECT_STORAGE_SECRET_KEY=${{ secrets.YA_OBJECT_STORAGE_SECRET_KEY }}
-              MONTHLY_BOOK_GOAL=10000
+              MONTHLY_BOOK_GOAL=1108

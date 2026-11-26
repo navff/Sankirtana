@@ -15,7 +15,7 @@
       "applicationUrl": "http://localhost:9999",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "MONTHLY_BOOK_GOAL": "10000"
+        "MONTHLY_BOOK_GOAL": "1108"
       }
     },
     "IIS Express": {
@@ -23,7 +23,7 @@
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "MONTHLY_BOOK_GOAL": "10000"
+        "MONTHLY_BOOK_GOAL": "1108"
       }
     }
   }
