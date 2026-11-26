@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
-using Sankirtana.Web.Business.PortalUsers;
+using Microsoft.AspNetCore.Mvc;
 using Sankirtana.Web.Business.Sales;
+using Sankirtana.Web.Common;
 
 namespace Sankirtana.Web.Pages.Reports;
 
+[RESTAuthorize(Optional = true)]
+[ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
 public class AllDay : PageModel
 {
     private SalesService _salesService;

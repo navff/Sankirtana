@@ -4,10 +4,11 @@
 @{
     ViewBag.Title = "Пользователи";
 }
-<h1>@ViewBag.Title</h1>
-<br/>
-<div>
-  <a href="~/users/edituser" class="btn btn-primary">Добавить пользователя</a>
+<div class="page-heading">
+  <h1>@ViewBag.Title</h1>
+  <a asp-page="/Users/EditUser" class="btn btn-primary">Добавить пользователя</a>
+</div>
+<div class="table-responsive table-surface">
   <table class="table">
     <thead>
     <tr>

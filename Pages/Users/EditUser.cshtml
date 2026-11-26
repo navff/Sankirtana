@@ -2,11 +2,12 @@
 @model Sankirtana.Web.Pages.EditUser
 
 @{
-    
+    ViewData["Title"] = Model.EditedUser.Id == MongoDB.Bson.ObjectId.Empty ? "Добавить пользователя" : "Редактировать пользователя";
 }
 
+<h1>@ViewData["Title"]</h1>
 <div>
-    <form method="post" asp-antiforgery="true">
+    <form method="post" asp-antiforgery="true" class="form-surface">
         <input type="hidden" value="@Model.EditedUser.Id" name="Id"/>
         <div class="mb-3">
             <label for="firstName" class="form-label">Имя</label>

@@ -1,17 +1,20 @@
 ﻿<!DOCTYPE html>
+@{
+    var currentPage = ViewContext.RouteData.Values["page"]?.ToString();
+    string? Current(string page) => string.Equals(currentPage, page, StringComparison.OrdinalIgnoreCase) ? "page" : null;
+}
 <html lang="ru">
 <head>
     <meta name="robots" content="noindex"/> 
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="icon" type="image/x-icon" href="~/favicon.png">
-    <title>@ViewData["Title"] - Sankirtana.Web</title>
+    <title>@ViewData["Title"] — Книги людям</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
-    <link rel="stylesheet" href="~/Sankirtana.Web.styles.css" asp-append-version="true"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
     
     
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -26,29 +29,30 @@
 </head>
 <body>
 <header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <nav class="navbar navbar-expand-md navbar-light site-navbar" aria-label="Главное меню">
         <div class="container">
-            <a class="navbar-brand" asp-area="" asp-page="/Index"><img src="~/logo.png" alt="logo" class="logo"/></a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
+            <a class="navbar-brand" asp-area="" asp-page="/Index"><img src="~/logo.png" alt="Книги людям" class="logo"/></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#primary-menu" aria-controls="primary-menu"
+                    aria-expanded="false" aria-label="Главное меню">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
+            <div class="navbar-collapse collapse" id="primary-menu">
+                <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-page="/reports/allday">Статистика</a>
+                        <a class="nav-link" asp-page="/Reports/AllDay" aria-current="@Current("/Reports/AllDay")">Статистика</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-page="/Dashboard/Index"
-                           aria-current="@(ViewContext.RouteData.Values["page"]?.ToString() == "/Dashboard/Index" ? "page" : null)">Дашборд</a>
+                        <a class="nav-link" asp-page="/Dashboard/Index" aria-current="@Current("/Dashboard/Index")">Дашборд</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-page="/books/index">Книги</a>
+                        <a class="nav-link" asp-page="/Books/Index" aria-current="@Current("/Books/Index")">Книги</a>
                     </li>
                     @if (User.IsInRole(PortalRoles.Administrator))
                     {
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-page="/Users/Index">Пользователи</a>
+                            <a class="nav-link admin-nav-link" asp-page="/Users/Index" aria-current="@Current("/Users/Index")">
+                                <span class="nav-lock" aria-hidden="true"></span>Пользователи<span class="visually-hidden"> (только для администраторов)</span>
+                            </a>
                         </li>
                     }
                 </ul>
@@ -56,16 +60,15 @@
         </div>
     </nav>
 </header>
-<div class="container">
-    <main role="main" class="pb-3">
-        @RenderBody()
-    </main>
-</div>
+<main class="container site-content">
+    @RenderBody()
+</main>
 
-<footer class="border-top footer text-muted">
-    <div class="container">
-        @User.Identity?.Name
-    </div>
-</footer>
+@if (User.Identity?.IsAuthenticated == true)
+{
+    <footer class="site-footer">
+        <div class="container">@User.Identity.Name</div>
+    </footer>
+}
 </body>
 </html>

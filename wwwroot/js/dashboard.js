@@ -4,6 +4,12 @@ if (chart) {
     const canvas = chart.querySelector("canvas");
     const tooltip = chart.querySelector(".daily-tooltip");
     const context = canvas.getContext("2d");
+    const theme = getComputedStyle(chart);
+    const labelColor = theme.getPropertyValue("--muted").trim();
+    const gridColor = theme.getPropertyValue("--line").trim();
+    const fillColor = theme.getPropertyValue("--chart-fill").trim();
+    const lineColor = theme.getPropertyValue("--brand").trim();
+    const guideColor = theme.getPropertyValue("--chart-guide").trim();
     const counts = chart.dataset.counts.split(",").map(Number);
     const days = Number(chart.dataset.days);
     const numberFormat = new Intl.NumberFormat("ru-RU");
@@ -30,7 +36,7 @@ if (chart) {
         canvas.width = Math.round(width * pixelRatio);
         canvas.height = Math.round(height * pixelRatio);
         context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
-        context.font = "11px system-ui, sans-serif";
+        context.font = `11px ${theme.fontFamily}`;
 
         const left = context.measureText(numberFormat.format(ceiling)).width + 11;
         const right = width - 12;
@@ -41,8 +47,8 @@ if (chart) {
 
         bounds = { left, right, top, bottom };
         points = counts.slice(0, days).map((count, day) => [x(day), y(count)]);
-        context.fillStyle = "#52685e";
-        context.strokeStyle = "#dbe5dc";
+        context.fillStyle = labelColor;
+        context.strokeStyle = gridColor;
         context.textAlign = "right";
         context.textBaseline = "middle";
 
@@ -73,10 +79,10 @@ if (chart) {
         const [lastX, lastY] = points[points.length - 1];
         area.lineTo(lastX, bottom);
         area.closePath();
-        context.fillStyle = "#e2efe3";
+        context.fillStyle = fillColor;
         context.fill(area);
 
-        context.strokeStyle = "#286d59";
+        context.strokeStyle = lineColor;
         context.lineWidth = 2.4;
         context.lineCap = "round";
         context.lineJoin = "round";
@@ -84,7 +90,7 @@ if (chart) {
 
         const [dotX, dotY] = points[activeDay] ?? [lastX, lastY];
         if (activeDay >= 0) {
-            context.strokeStyle = "#75988a";
+            context.strokeStyle = guideColor;
             context.lineWidth = 1;
             context.beginPath();
             context.moveTo(dotX, top);
@@ -92,7 +98,7 @@ if (chart) {
             context.stroke();
         }
 
-        context.fillStyle = "#286d59";
+        context.fillStyle = lineColor;
         context.beginPath();
         context.arc(dotX, dotY, activeDay >= 0 ? 4.5 : 3.5, 0, 2 * Math.PI);
         context.fill();
@@ -130,4 +136,5 @@ if (chart) {
         tooltip.hidden = true;
         drawChart();
     }).observe(chart);
+    document.fonts.ready.then(drawChart);
 }

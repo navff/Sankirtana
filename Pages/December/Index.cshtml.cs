@@ -1,8 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 using Sankirtana.Web.Business.Sales;
+using Sankirtana.Web.Common;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Sankirtana.Web.Pages.December;
 
+[RESTAuthorize(Optional = true)]
+[ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
 public class Index : PageModel
 {
     private SalesService _salesService;

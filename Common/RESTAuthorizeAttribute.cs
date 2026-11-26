@@ -9,6 +9,7 @@ namespace Sankirtana.Web.Common;
 public sealed class RESTAuthorizeAttribute : Attribute, IAsyncAuthorizationFilter
 {
     private readonly string[] _roles;
+    public bool Optional { get; set; }
 
     public RESTAuthorizeAttribute(params string[] roles)
     {
@@ -18,17 +19,24 @@ public sealed class RESTAuthorizeAttribute : Attribute, IAsyncAuthorizationFilte
     public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
     {
         var token = context.HttpContext.Request.Cookies["Token"];
-        if (string.IsNullOrWhiteSpace(token))
+        PortalUser? user = null;
+        if (!string.IsNullOrWhiteSpace(token))
         {
-            context.Result = new ForbidResult();
+            var userService = context.HttpContext.RequestServices.GetRequiredService<PortalUserService>();
+            user = await userService.GetByToken(token);
+        }
+
+        if (user == null)
+        {
+            if (!Optional || _roles.Length > 0)
+            {
+                context.Result = new ForbidResult();
+            }
             return;
         }
 
-        var userService = context.HttpContext.RequestServices.GetRequiredService<PortalUserService>();
-        var user = await userService.GetByToken(token);
-        var role = user?.EffectiveRole;
-        if (user == null ||
-            (_roles.Length > 0 && !_roles.Contains(role, StringComparer.OrdinalIgnoreCase)))
+        var role = user.EffectiveRole;
+        if (_roles.Length > 0 && !_roles.Contains(role, StringComparer.OrdinalIgnoreCase))
         {
             context.Result = new ForbidResult();
             return;

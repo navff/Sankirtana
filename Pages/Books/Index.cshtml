@@ -6,11 +6,14 @@
   var canManageBooks = User.IsInRole(PortalRoles.Administrator);
 }
 
-<div>
+<div class="page-heading">
+  <h1>@ViewBag.Title</h1>
   @if (canManageBooks)
   {
     <a asp-page="/Books/EditBook" class="btn btn-primary">Добавить книгу</a>
   }
+</div>
+<div class="table-responsive table-surface">
   <table class="table">
     <thead>
     <tr>
