@@ -1,9 +1,13 @@
 using System.Globalization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Sankirtana.Web.Business.Sales;
+using Sankirtana.Web.Common;
 
 namespace Sankirtana.Web.Pages.Dashboard;
 
+[RESTAuthorize]
+[ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
 public class Index : PageModel
 {
     public static readonly CultureInfo DisplayCulture = CultureInfo.GetCultureInfo("ru-RU");

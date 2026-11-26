@@ -48,7 +48,7 @@ public class PortalUserService
         return user;
     }
     
-    public async Task<PortalUsers.PortalUser> GetByToken(string token)
+    public async Task<PortalUsers.PortalUser?> GetByToken(string token)
     {
         var users = _dbStore.DB.GetCollection<PortalUsers.PortalUser>("users");
         var user = await users.Find(u => u.Token == token).FirstOrDefaultAsync();

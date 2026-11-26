@@ -52,7 +52,7 @@ namespace Sankirtana.Web.Common;
         /*public override void OnAuthorization(HttpActionContext actionContext)
         {
             var token = actionContext.Request.Headers.Authorization?.Parameter;
-            if (token == null)
+            if (string.IsNullOrWhiteSpace(token))
             {
                 actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized)
                 {
@@ -105,8 +105,14 @@ namespace Sankirtana.Web.Common;
                 return;
             }
 
-            var userService = context.HttpContext.RequestServices.GetService<PortalUserService>();
+            var userService = context.HttpContext.RequestServices.GetRequiredService<PortalUserService>();
             var user = await userService.GetByToken(token);
+            if (user == null)
+            {
+                context.Result = new ForbidResult();
+                return;
+            }
+
             context.HttpContext.User = new GenericPrincipal(new Identity() {Name = user.Name, IsAuthenticated = true, Id = user.Id.ToString()}, new []{user.Role});
         }
     }
